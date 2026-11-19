@@ -1,255 +1,1038 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rental app – native style, full flow</title>
-<style>
-:root{
-  --ink:#0A0A0A; --ink2:#5F6B71; --ink3:#9AA5AA;
-  --teal:#427F94; --teal-d:#33687A; --teal-l:#E3EDF0;
-  --bg:#F2F4F5; --surf:#fff; --line:#E3E7E9; --red:#C62828;
-  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#CBD2D5;font-family:var(--font);color:var(--ink);padding:32px 16px 64px;font-size:17px;line-height:1.3}
-.wrap{display:grid;grid-template-columns:repeat(auto-fill,375px);gap:40px 28px;justify-content:center;max-width:1400px;margin:0 auto}
-.cap{font-size:13px;color:#4d585d;margin-bottom:8px;font-weight:600}
-.s{width:375px;height:812px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-.sb{height:44px;flex:none;display:flex;justify-content:space-between;align-items:flex-end;padding:0 24px 6px;font-size:15px;font-weight:600;background:inherit}
-.s.w{background:#fff}
-svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
-img{display:block;width:100%;object-fit:cover}
-/* nav */
-.nb{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:var(--teal-d)}
-.nb .t{position:absolute;left:0;right:0;text-align:center;font-weight:600;color:var(--ink);pointer-events:none}
-.large{font-size:32px;font-weight:700;letter-spacing:-.4px;padding:4px 20px 12px}
-/* grouped list */
-.gl{margin:0 16px 20px;background:var(--surf);border-radius:10px;overflow:hidden}
-.gh{font-size:13px;color:var(--ink2);padding:0 32px 6px;text-transform:none}
-.r{display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:48px;position:relative}
-.r+.r:before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:var(--line)}
-.r .k{color:var(--ink2);font-size:13px;display:block}
-.r .v{font-size:17px}
-.r .sp{flex:1}
-.r .g{color:var(--ink3)}
-.chev{width:8px;height:14px;stroke:var(--ink3);fill:none;stroke-width:2;flex:none}
-/* buttons */
-.bt{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:600;font-size:17px;padding:14px;border-radius:10px}
-.bt.k{background:var(--ink)}.bt.o{background:transparent;color:var(--teal-d);box-shadow:inset 0 0 0 1px var(--teal)}
-.bar{flex:none;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px 30px;display:flex;align-items:center;gap:16px}
-.bar .bt{flex:1}
-.price{font-size:22px;font-weight:700;letter-spacing:-.3px}
-.sm{font-size:13px;color:var(--ink2)}
-/* tab bar */
-.tabs{flex:none;margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);padding:8px 0 28px}
-.tabs div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--ink3)}
-.tabs .on{color:var(--teal-d);font-weight:600}
-/* seg */
-.seg{display:flex;margin:0 16px 12px;background:#E4E8EA;border-radius:9px;padding:2px}
-.seg div{flex:1;text-align:center;padding:6px;font-size:14px;border-radius:7px;color:var(--ink)}
-.seg .on{background:#fff;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.12)}
-/* bike row */
-.br{display:flex;gap:12px;padding:12px 16px;position:relative;align-items:center}
-.br+.br:before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:var(--line)}
-.br img{width:96px;height:72px;border-radius:8px;flex:none;background:#eef1f2}
-.br b{font-size:16px;display:block}.br .sm{display:block;margin-top:2px}
-.br .p{margin-left:auto;text-align:right;font-weight:700;font-size:17px}
-/* calendar */
-.dw{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:var(--ink3);padding:6px 12px;border-bottom:1px solid var(--line);background:#fff}
-.cal{flex:1;overflow:hidden;background:#fff;padding:0 12px}
-.cal h4{font-size:15px;font-weight:700;padding:18px 6px 6px}
-.cg{display:grid;grid-template-columns:repeat(7,1fr)}
-.cg i{font-style:normal;height:42px;display:grid;place-items:center;font-size:16px;position:relative}
-.cg i b{position:relative;z-index:1;font-weight:400}
-.cg .x{color:#C3CBCF}
-.cg .m{background:var(--teal-l)}
-.cg .a:before,.cg .z:before{content:"";position:absolute;inset:0;background:var(--teal-l)}
-.cg .a:before{left:50%}.cg .z:before{right:50%}
-.cg .a b,.cg .z b{width:38px;height:38px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:600}
-/* otp */
-.otp{display:flex;gap:10px;padding:0 20px}.otp div{flex:1;height:54px;border-radius:10px;background:#F2F4F5;display:grid;place-items:center;font-size:24px;font-weight:600}
-.otp .c{box-shadow:inset 0 0 0 2px var(--teal);background:#fff}
-.ck{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink3);flex:none}
-.ck.on{background:var(--teal);box-shadow:none;display:grid;place-items:center}
-.ck.on:after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-</style>
-</head>
-<body>
-<svg width="0" height="0" style="position:absolute"><defs>
-<symbol id="bk" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
-<symbol id="cl" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
-<symbol id="hm" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></symbol>
-<symbol id="pl" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></symbol>
-<symbol id="tr" viewBox="0 0 24 24"><path d="M7 3h10v18l-3-2-2 2-2-2-3 2z"/><path d="M10 8h4M10 12h4"/></symbol>
-<symbol id="ac" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
-<symbol id="pn" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
-<symbol id="sl" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
-</defs></svg>
-
-<div class="wrap">
-
-<!-- 1 -->
-<div><div class="cap">1 · Welcome</div><div class="s w">
-  <img style="height:430px" src="https://storage.googleapis.com/banani-generated-images/generated-images/c5a37949-e667-4a1b-8d82-7e9acf7b3632.jpg" alt="">
-  <div style="padding:28px 20px 0">
-    <div style="font-size:28px;font-weight:700;letter-spacing:-.4px">Rent a two-wheeler<br>in Agra and beyond.</div>
-    <div class="sm" style="margin:8px 0 20px;font-size:15px">Enter your mobile number to continue.</div>
-    <div style="display:flex;gap:8px"><div style="padding:14px;background:var(--bg);border-radius:10px">+91</div><div style="flex:1;padding:14px;background:var(--bg);border-radius:10px;box-shadow:inset 0 0 0 2px var(--teal)">7907006027</div></div>
-    <div class="bt" style="margin-top:16px">Continue</div>
-    <div class="sm" style="margin-top:16px;text-align:center">By continuing you agree to the <u>Terms</u> and <u>Privacy Policy</u>.</div>
-  </div>
-</div></div>
-
-<!-- 2 -->
-<div><div class="cap">2 · Verify number</div><div class="s w">
-  <div class="sb"><span>10:59</span><span>62%</span></div>
-  <div class="nb"><svg class="i"><use href="#bk"/></svg></div>
-  <div style="padding:12px 20px 24px"><div style="font-size:28px;font-weight:700;letter-spacing:-.4px">Enter the 4-digit code</div><div class="sm" style="margin-top:8px;font-size:15px">We sent it to +91 7907006027.</div></div>
-  <div class="otp"><div>4</div><div>8</div><div class="c">2</div><div></div></div>
-  <div class="sm" style="padding:16px 20px">Resend code in 0:24</div>
-  <div style="margin:auto 16px 40px"><div class="bt" style="background:#C9D1D4">Verify</div></div>
-</div></div>
-
-<!-- 3 -->
-<div><div class="cap">3 · Rent</div><div class="s">
-  <div class="sb"><span>10:36</span><span>62%</span></div>
-  <div class="nb" style="justify-content:flex-start;gap:4px"><svg class="i"><use href="#pn"/></svg><b style="color:var(--ink);font-weight:600">Agra</b><svg class="chev" viewBox="0 0 8 14" style="transform:rotate(90deg);margin-left:4px"><path d="M1 1l6 6-6 6"/></svg></div>
-  <div class="large">Rent a ride</div>
-  <div class="gh">Your trip</div>
-  <div class="gl">
-    <div class="r"><div><span class="k">Pick-up</span><span class="v">Thu, 19 Nov · 8:00 AM</span></div><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-    <div class="r"><div><span class="k">Drop-off</span><span class="v">Fri, 20 Nov · 9:00 AM</span></div><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-  </div>
-  <div style="margin:0 16px 24px"><div class="bt">Show available bikes</div></div>
-  <div class="gh">Explore</div>
-  <div class="gl">
-    <div class="br"><img src="https://storage.googleapis.com/banani-generated-images/generated-images/7a67f3f2-3cc1-4648-9536-3df415a1663a.jpg" alt=""><div><b>Store</b><span class="sm">Helmets, jackets and riding gear</span></div></div>
-    <div class="br"><img src="https://storage.googleapis.com/banani-generated-images/generated-images/c240487f-238a-4989-92fe-c1cd0826b0fe.jpg" alt=""><div><b>Adventures</b><span class="sm">Guided group rides</span></div></div>
-  </div>
-  <div class="tabs"><div class="on"><svg class="i"><use href="#hm"/></svg>Rent</div><div><svg class="i"><use href="#pl"/></svg>Plans</div><div><svg class="i"><use href="#tr"/></svg>Trips</div><div><svg class="i"><use href="#ac"/></svg>Account</div></div>
-</div></div>
-
-<!-- 4 -->
-<div><div class="cap">4 · Choose dates</div><div class="s w">
-  <div class="sb"><span>10:37</span><span>62%</span></div>
-  <div class="nb"><svg class="i"><use href="#cl"/></svg><span class="t">Dates</span><span style="font-weight:600">Reset</span></div>
-  <div style="display:flex;border-bottom:1px solid var(--line)"><div style="flex:1;padding:8px 20px 10px;border-bottom:3px solid var(--teal)"><span class="sm">Pick-up</span><div style="font-weight:600">Thu, 19 Nov</div></div><div style="flex:1;padding:8px 20px 10px"><span class="sm">Drop-off</span><div style="font-weight:600">Fri, 20 Nov</div></div></div>
-  <div class="dw"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-  <div class="cal" id="cal"></div>
-  <div style="display:flex;border-top:1px solid var(--line);background:#fff"><div style="flex:1;padding:10px 20px"><span class="sm">Pick-up time</span><div style="font-weight:600">8:00 AM</div></div><div style="flex:1;padding:10px 20px;border-left:1px solid var(--line)"><span class="sm">Drop-off time</span><div style="font-weight:600">9:00 AM</div></div></div>
-  <div class="bar"><div><div class="sm">1 day, 1 hr</div></div><div class="bt">Done</div></div>
-</div></div>
-
-<!-- 5 -->
-<div><div class="cap">5 · Available bikes</div><div class="s">
-  <div class="sb"><span>11:02</span><span>62%</span></div>
-  <div class="nb"><svg class="i"><use href="#bk"/></svg><span class="t">Agra</span><svg class="i"><use href="#sl"/></svg></div>
-  <div style="padding:0 20px 10px"><div style="font-weight:600">19 Nov, 8:00 AM – 20 Nov, 9:00 AM</div><div class="sm">Prices exclude taxes and fuel</div></div>
-  <div class="seg"><div class="on">Scooters</div><div>Bikes</div><div>All</div></div>
-  <div class="gl" style="margin-bottom:0">
-    <div class="br"><img src="https://storage.googleapis.com/banani-generated-images/generated-images/10d923e1-e41f-438d-a9c8-98f4cda56670.jpg" alt=""><div><b>Honda Activa 5G</b><span class="sm">240 km included</span><span class="sm">Deposit ₹2,000</span></div><div class="p">₹1,300</div></div>
-    <div class="br"><img src="https://storage.googleapis.com/banani-generated-images/generated-images/10d923e1-e41f-438d-a9c8-98f4cda56670.jpg" alt=""><div><b>TVS Jupiter</b><span class="sm">240 km included</span><span class="sm">Deposit ₹2,000</span></div><div class="p">₹1,250</div></div>
-    <div class="br" style="opacity:.5"><img src="https://storage.googleapis.com/banani-generated-images/generated-images/10d923e1-e41f-438d-a9c8-98f4cda56670.jpg" alt=""><div><b>Suzuki Access</b><span class="sm">Unavailable for these dates</span></div></div>
-  </div>
-</div></div>
-
-<!-- 6 -->
-<div><div class="cap">6 · Bike detail</div><div class="s">
-  <div style="position:relative;background:#fff"><img style="height:250px" src="https://storage.googleapis.com/banani-generated-images/generated-images/10d923e1-e41f-438d-a9c8-98f4cda56670.jpg" alt="">
-    <div style="position:absolute;top:50px;left:16px;width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(0,0,0,.2)"><svg class="i"><use href="#bk"/></svg></div></div>
-  <div style="padding:16px 20px 12px;background:#fff"><div style="font-size:26px;font-weight:700;letter-spacing:-.3px">Honda Activa 5G</div><div class="sm" style="margin-top:2px">Automatic scooter · 110 cc</div></div>
-  <div style="height:12px"></div>
-  <div class="gl">
-    <div class="r"><span>Distance included</span><span class="sp"></span><span class="g">240 km</span></div>
-    <div class="r"><span>Refundable deposit</span><span class="sp"></span><span class="g">₹2,000</span></div>
-    <div class="r"><span>Fuel</span><span class="sp"></span><span class="g">Not included</span></div>
-    <div class="r"><svg class="i" style="color:var(--teal-d)"><use href="#pn"/></svg><div><span class="k">Pick-up from</span><span class="v">Select location</span></div><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-  </div>
-  <div class="sm" style="padding:0 32px">Bring a valid ID and driving licence. The deposit is collected at pick-up and returned when you drop the bike off.</div>
-  <div class="bar" style="margin-top:auto"><div><div class="sm">Total</div><div class="price">₹1,300</div></div><div class="bt">Book</div></div>
-</div></div>
-
-<!-- 7 -->
-<div><div class="cap">7 · Pick-up location</div><div class="s">
-  <div class="sb"><span>11:19</span><span>62%</span></div>
-  <div class="nb"><svg class="i"><use href="#bk"/></svg><span class="t">Pick-up location</span><span></span></div>
-  <div style="padding:4px 16px 12px"><div style="background:#E4E8EA;border-radius:10px;padding:9px 12px;color:var(--ink3);font-size:16px">Search Agra</div></div>
-  <div class="gl">
-    <div class="r"><div><b style="font-weight:600">Sanjay Place</b><span class="sm" style="display:block">2.1 km · Open 7 AM – 10 PM</span></div><span class="sp"></span><div class="ck on"></div></div>
-    <div class="r"><div><b style="font-weight:600">Agra Cantt Station</b><span class="sm" style="display:block">4.5 km · Open 24 hours</span></div><span class="sp"></span><div class="ck"></div></div>
-    <div class="r"><div><b style="font-weight:600">Taj Ganj</b><span class="sm" style="display:block">6.0 km · Open 8 AM – 9 PM</span></div><span class="sp"></span><div class="ck"></div></div>
-  </div>
-  <div class="bar" style="margin-top:auto"><div class="bt">Use Sanjay Place</div></div>
-</div></div>
-
-<!-- 8 -->
-<div><div class="cap">8 · Review and pay</div><div class="s">
-  <div class="sb"><span>11:20</span><span>62%</span></div>
-  <div class="nb"><svg class="i"><use href="#bk"/></svg><span class="t">Review</span><span></span></div>
-  <div class="gh" style="margin-top:8px">Trip</div>
-  <div class="gl">
-    <div class="r"><b style="font-weight:600">Honda Activa 5G</b></div>
-    <div class="r"><span class="sm" style="width:64px">Pick-up</span><span>Thu, 19 Nov · 8:00 AM</span></div>
-    <div class="r"><span class="sm" style="width:64px">Drop-off</span><span>Fri, 20 Nov · 9:00 AM</span></div>
-    <div class="r"><span class="sm" style="width:64px">Location</span><span>Sanjay Place</span></div>
-  </div>
-  <div class="gh">Price</div>
-  <div class="gl">
-    <div class="r"><span>Rental</span><span class="sp"></span><span>₹1,100.00</span></div>
-    <div class="r"><span>GST 18%</span><span class="sp"></span><span>₹198.00</span></div>
-    <div class="r"><span>Insurance</span><span class="sp"></span><span>₹2.00</span></div>
-    <div class="r"><b>Total</b><span class="sp"></span><b>₹1,300.00</b></div>
-  </div>
-  <div class="gh">Pay with</div>
-  <div class="gl"><div class="r"><span>UPI</span><span class="sp"></span><div class="ck on"></div></div><div class="r"><span>Debit or credit card</span><span class="sp"></span><div class="ck"></div></div></div>
-  <div class="bar" style="margin-top:auto"><div class="bt">Pay ₹1,300</div></div>
-</div></div>
-
-<!-- 9 -->
-<div><div class="cap">9 · Booked</div><div class="s w">
-  <div class="sb"><span>11:22</span><span>61%</span></div>
-  <div style="padding:48px 20px 0">
-    <div style="width:44px;height:44px;border-radius:12px;background:var(--teal);display:grid;place-items:center;color:#fff"><svg class="i" style="stroke-width:2.4"><path d="M5 12l5 5 9-10"/></svg></div>
-    <div style="font-size:28px;font-weight:700;letter-spacing:-.4px;margin-top:16px">You're booked</div>
-    <div class="sm" style="margin-top:6px;font-size:15px">Show this booking number at pick-up, with your ID and licence.</div>
-  </div>
-  <div style="margin:24px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-    <div class="r"><span class="sm" style="width:90px">Booking no.</span><b style="letter-spacing:.5px">RB-482910</b></div>
-    <div class="r"><span class="sm" style="width:90px">Bike</span><span>Honda Activa 5G</span></div>
-    <div class="r"><span class="sm" style="width:90px">Pick-up</span><span>Thu, 19 Nov · 8:00 AM</span></div>
-    <div class="r"><span class="sm" style="width:90px">Drop-off</span><span>Fri, 20 Nov · 9:00 AM</span></div>
-    <div class="r"><span class="sm" style="width:90px">Location</span><span>Sanjay Place, Agra</span></div>
-  </div>
-  <div style="margin:auto 16px 40px"><div class="bt" style="margin-bottom:10px">Get directions</div><div class="bt o">View trip</div></div>
-</div></div>
-
-<!-- 10 -->
-<div><div class="cap">10 · Account</div><div class="s">
-  <div class="sb"><span>10:41</span><span>62%</span></div>
-  <div class="large" style="padding-top:12px">Account</div>
-  <div class="gl"><div class="r"><div style="width:44px;height:44px;border-radius:50%;background:var(--teal-l);display:grid;place-items:center;color:var(--teal-d)"><svg class="i"><use href="#ac"/></svg></div><div><b style="font-weight:600">+91 7907006027</b><span class="sm" style="display:block">Add your driving licence</span></div><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div></div>
-  <div class="gl">
-    <div class="r"><span>My trips</span><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-    <div class="r"><span>Payments and deposits</span><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-    <div class="r"><span>Help</span><span class="sp"></span><svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6"/></svg></div>
-  </div>
-  <div class="gl"><div class="r" style="color:var(--red);justify-content:center">Log out</div></div>
-  <div class="tabs"><div><svg class="i"><use href="#hm"/></svg>Rent</div><div><svg class="i"><use href="#pl"/></svg>Plans</div><div><svg class="i"><use href="#tr"/></svg>Trips</div><div class="on"><svg class="i"><use href="#ac"/></svg>Account</div></div>
-</div></div>
-
-</div>
+<!-- This site was created with figma.to.website. https://divriots.com/figma.to.website -->
+<!-- Last Published: Thu Nov 19 2026 09:05:55 GMT+0000 (Coordinated Universal Time) -->
+<html lang="en" xml:lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cozy Rides</title>
+    
+    <meta name="description" content="Created with figma.to.website" />
+    <meta property="og:url" content="https://merissa-q9ahr7v2y4.figweb.site/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Frame 38" />
+    <meta property="og:description" content="Created with figma.to.website" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-665f1481cb693117c8a3ad85ba285d58e6de03bc/public" />
+    <meta name="twitter:title" content="Frame 38" />
+    <meta name="twitter:description" content="Created with figma.to.website" />
+    <meta name="twitter:image:type" content="image/jpeg" />
+    <meta name="twitter:image:width" content="1200" />
+    <meta name="twitter:image:height" content="630" />
+    <meta name="twitter:image" content="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-665f1481cb693117c8a3ad85ba285d58e6de03bc/public" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    
+    
+    
+    <style media="all">
+      article.prose{line-height:1.75;display:contents}article.prose a{font-weight:500;text-decoration:underline}article.prose h1{margin-block:0 1.23em;font-size:2.25em;line-height:1.11}article.prose h2{margin-block:2em 1em;font-size:1.5em;line-height:1.34}article.prose h3{margin-block:1.6em .6em;font-size:1.25em;line-height:1.6}article.prose h4{margin-top:1.5em;margin-bottom:.5em;line-height:1.5}article.prose img{width:100%;margin-block:2em}article.prose figure.cms-image,article.prose figure.cms-video{margin-block:2em}article.prose figure>*{margin-block:0}article.prose figure.cms-image img,article.prose figure.cms-video video,article.prose figure.cms-video iframe{width:100%;display:block}article.prose figure.cms-video iframe{aspect-ratio:16/9;border:0}article.prose figcaption{opacity:.7;margin-top:.857143em;font-size:.875em;line-height:1.42857}article.prose .columns{gap:1.5em;margin-block:1.25em;display:flex}article.prose .column{flex:1;min-width:0}@media (max-width:640px){article.prose .columns{flex-direction:column}}article.prose blockquote{margin-block:1.6em;padding:.75em 1.25em}article.prose ul,article.prose ol{padding-inline-start:1.5em}article.prose table{table-layout:auto;width:100%;margin:1.5em 0}article.prose thead th{vertical-align:bottom;font-weight:600}article.prose tbody td{vertical-align:baseline}article.prose tfoot td{vertical-align:top}article.prose th,article.prose td{text-align:start;padding:.75em}article.prose thead th:first-child,article.prose tbody td:first-child,article.prose tfoot td:first-child{padding-inline-start:0}article.prose thead th:last-child,article.prose tbody td:last-child,article.prose tfoot td:last-child{padding-inline-end:0}article.prose thead{box-shadow:0 1px #ffffffbf,0 1px}article.prose tbody tr{box-shadow:0 1px #ffffffd9,0 1px}article.prose hr{opacity:.3;margin:3em 0}
+    </style>
+    <style>
+      @font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJbecmNE.woff2)format("woff2");unicode-range:U+900-97F,U+1CD0-1CF4,U+1CF7-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B0A}@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJnecmNE.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJfecg.woff2)format("woff2");unicode-range:U+??,U+131,U+152-153,U+2BB-2BC,U+2C6,U+2DA,U+2DC,U+304,U+308,U+329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLGT9Z11lFc-K.woff2)format("woff2");unicode-range:U+900-97F,U+1CD0-1CF4,U+1CF7-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B0A}@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLGT9Z1JlFc-K.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2)format("woff2");unicode-range:U+??,U+131,U+152-153,U+2BB-2BC,U+2C6,U+2DA,U+2DC,U+304,U+308,U+329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLCz7Z11lFc-K.woff2)format("woff2");unicode-range:U+900-97F,U+1CD0-1CF4,U+1CF7-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B0A}@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLCz7Z1JlFc-K.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2)format("woff2");unicode-range:U+??,U+131,U+152-153,U+2BB-2BC,U+2C6,U+2DA,U+2DC,U+304,U+308,U+329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Quicksand;font-style:normal;font-weight:500 700;font-display:swap;src:url(https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJFQNcOM.woff2)format("woff2");unicode-range:U+102-103,U+110-111,U+128-129,U+168-169,U+1A0-1A1,U+1AF-1B0,U+300-301,U+303-304,U+308-309,U+323,U+329,U+1EA0-1EF9,U+20AB}@font-face{font-family:Quicksand;font-style:normal;font-weight:500 700;font-display:swap;src:url(https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJVQNcOM.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Quicksand;font-style:normal;font-weight:500 700;font-display:swap;src:url(https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2)format("woff2");unicode-range:U+??,U+131,U+152-153,U+2BB-2BC,U+2C6,U+2DA,U+2DC,U+304,U+308,U+329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+    </style>
+    <style media="all">
+      *,:before,:after{box-sizing:border-box}body{-webkit-font-smoothing:antialiased}button{-webkit-font-smoothing:inherit;-moz-osx-font-smoothing:inherit;-webkit-appearance:none}*{margin:0;padding:0}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}input{font:inherit;background-color:inherit;border:none;outline:none}button{font:inherit;color:inherit;background:0 0;border-style:none;width:auto;line-height:normal;overflow:visible}textarea,select{font:inherit;background-color:inherit}img,picture,video,canvas,svg{display:block}textarea:focus-visible{outline:none}[data-visible=false]{display:none!important}.before-hidden:before,.after-hidden:after{display:none}.before-visible:before,.after-visible:after{content:""}.text{white-space:pre-wrap;overflow-wrap:break-word;tab-size:1}[data-reaction-click]{cursor:pointer}::placeholder{color:inherit;opacity:.54}body *{scrollbar-width:none}body ::-webkit-scrollbar{display:none}[name=honey-pot-field]{display:none!important}.pointer-events-none{pointer-events:none}.bleedScroll[data-bleed]:after{content:"";top:0;left:var(--f2w-bleed-end);width:1px;height:1px;position:absolute}
+    </style>
+    <style>
+      body{--Grays-Black:var(--Light-Grays-Black);--strock:#e4e4e459;--FONTS:#4198b3;--Light-Grays-Black:#000;--Dark-Grays-Black:#000}
+    </style>
+    <style>
+      body[data-color-scheme=light]{--Grays-Black:var(--Light-Grays-Black)}body[data-color-scheme=dark]{--Grays-Black:var(--Dark-Grays-Black)}
+    </style>
+    <style>
+      #_{min-height:100vh;display:grid}#Frame_38{border-radius:0;width:1317px;min-width:1317px;max-width:1317px;min-height:852px;max-height:852px;margin:0 auto;position:relative}#Home{--f2w-order:0;background-color:#fff;border-radius:0;width:393px;height:852px;position:absolute;top:0;left:0;overflow:hidden}#Rectangle_7{--f2w-order:0;background-color:#1a667d;border-radius:0;width:393px;height:304px;position:absolute;top:-100px;left:0}#Status_Bar_Light{--f2w-order:1;width:100%;height:46px;position:absolute;top:0;left:0;right:0}#Frame_15{--f2w-order:2;border-radius:0;width:187px;height:52px;position:absolute;top:57px;left:20px}#_8_188{text-align:left;color:#fff;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:20px;font-weight:600;line-height:160%;display:inline;position:absolute;top:0;left:0}#__0{-webkit-background-clip:text;background-clip:text}#_8_189{text-align:left;color:#fff;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:32px;left:0}#__1{-webkit-background-clip:text;background-clip:text}#Frame_11{--f2w-order:3;background-color:#fff;border-radius:24px;width:393px;height:312px;position:absolute;top:158px;left:0}#Frame_12{--f2w-order:0;border-radius:0;width:353px;height:198px;position:absolute;top:20px;left:20px}#Frame_3{--f2w-order:0;border-radius:0;width:353px;height:66px;position:absolute;top:0;left:0}#_8_193{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__2{-webkit-background-clip:text;background-clip:text}#Frame_2{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:211px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_map{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_map_0,#map{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_196{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__3{-webkit-background-clip:text;background-clip:text}#Frame_9{--f2w-order:1;border-radius:0;width:353px;height:66px;position:absolute;top:66px;left:0}#Frame_8{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_199{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__4{-webkit-background-clip:text;background-clip:text}#Frame_2_0{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_0,#calendar{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_202{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__5{-webkit-background-clip:text;background-clip:text}#Frame_5{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_204{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__6{-webkit-background-clip:text;background-clip:text}#Frame_7{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_209{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__7{-webkit-background-clip:text;background-clip:text}#Frame_10{--f2w-order:2;border-radius:0;width:353px;height:66px;position:absolute;top:132px;left:0}#Frame_8_0{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_212{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__8{-webkit-background-clip:text;background-clip:text}#Frame_2_1{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar_1{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_2,#calendar_0{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_215{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__9{-webkit-background-clip:text;background-clip:text}#Frame_5_0{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_217{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__10{-webkit-background-clip:text;background-clip:text}#Frame_7_0{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock_0{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_222{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__11{-webkit-background-clip:text;background-clip:text}#CTA_Button{--f2w-order:1;background-color:#000;border-radius:10px;width:353px;height:46px;position:absolute;top:246px;left:20px}#_8_224{text-align:center;color:#f4f5f7;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:16px;font-weight:600;line-height:170%;display:inline;position:absolute;top:9.5px;left:149.5px}#__12{-webkit-background-clip:text;background-clip:text}#image_1632{--f2w-order:4;border-radius:0;width:169px;height:169px;position:absolute;top:561px;left:14px}#Frame_33{--f2w-order:5;border-radius:0;width:382px;height:473.6px;position:absolute;top:470px;left:calc(50% - 190.5px)}#Frame_3_0{--f2w-order:0;border-radius:0;width:172px;height:31px;position:absolute;top:0;left:0}#_8_228{text-align:left;letter-spacing:.4px;color:#393c47;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:18px;font-weight:600;line-height:170%;display:inline;position:absolute;top:0;left:16px}#__13{-webkit-background-clip:text;background-clip:text}#Frame_31{--f2w-order:1;border-radius:0;width:382px;height:221.3px;position:absolute;top:31px;left:0}#Frame_29{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__14{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_0{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__15{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_235{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__16{-webkit-background-clip:text;background-clip:text}#Frame_29_0{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_0{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_0{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__17{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_1{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__18{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_0{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_241{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__19{-webkit-background-clip:text;background-clip:text}#Frame_32{--f2w-order:2;border-radius:0;width:382px;height:221.3px;position:absolute;top:252.3px;left:0}#Frame_29_1{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28_1{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_1{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__20{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_2{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__21{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_1{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_248{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__22{-webkit-background-clip:text;background-clip:text}#Frame_29_2{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_2{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_2{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__23{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_3{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__24{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_2{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_254{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__25{-webkit-background-clip:text;background-clip:text}#Rectangle_16{--f2w-order:6;background-color:#fff;border-radius:0;width:393px;height:72px;position:absolute;bottom:0;left:4px}#Frame_27{--f2w-order:7;border-radius:0;width:310px;height:44px;position:absolute;top:794px;left:calc(50% - 150.5px)}#Frame_23{--f2w-order:0;border-radius:0;width:32px;height:44px;position:absolute;top:0;left:0}#vuesax_linear_home{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:4px}#vuesax_linear_home_0,#home{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#Vector,#Vector_0{stroke:var(--FONTS,#4198b3);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:round}#_8_259{text-align:left;color:var(--FONTS,#4198b3);--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:12px;font-weight:600;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__26{-webkit-background-clip:text;background-clip:text}#Frame_24{--f2w-order:1;border-radius:0;width:38px;height:44px;position:absolute;top:0;left:80px}#vuesax_linear_receipt_2{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:7px}#vuesax_linear_receipt_2_0{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_262{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-.5px}#__27{-webkit-background-clip:text;background-clip:text}#Frame_25{--f2w-order:2;border-radius:0;width:62px;height:44px;position:absolute;top:0;left:166px}#vuesax_linear_notification{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:19px}#vuesax_linear_notification_0,#notification{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_265{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-2px}#__28{-webkit-background-clip:text;background-clip:text}#Frame_26{--f2w-order:3;border-radius:0;width:34px;height:44px;position:absolute;top:0;left:276px}#vuesax_linear_profile{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:5px}#vuesax_linear_profile_0,#profile{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_268{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__29{-webkit-background-clip:text;background-clip:text}#Home_0{--f2w-order:1;background-color:#fff;border-radius:0;width:393px;height:852px;position:absolute;top:0;left:462px;overflow:hidden}#Rectangle_7_0{--f2w-order:0;background-color:#1a667d;border-radius:0;width:393px;height:304px;position:absolute;top:-100px;left:0}#Status_Bar_Light_0{--f2w-order:1;width:100%;height:46px;position:absolute;top:0;left:0;right:0}#Frame_15_0{--f2w-order:2;border-radius:0;width:187px;height:52px;position:absolute;top:57px;left:20px}#_8_284{text-align:left;color:#fff;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:20px;font-weight:600;line-height:160%;display:inline;position:absolute;top:0;left:0}#__30{-webkit-background-clip:text;background-clip:text}#_8_285{text-align:left;color:#fff;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:32px;left:0}#__31{-webkit-background-clip:text;background-clip:text}#Frame_11_0{--f2w-order:3;background-color:#fff;border-radius:24px;width:393px;height:312px;position:absolute;top:158px;left:0}#Frame_12_0{--f2w-order:0;border-radius:0;width:353px;height:198px;position:absolute;top:20px;left:20px}#Frame_3_1{--f2w-order:0;border-radius:0;width:353px;height:66px;position:absolute;top:0;left:0}#_8_289{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__32{-webkit-background-clip:text;background-clip:text}#Frame_2_2{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:211px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_map_1{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_map_2,#map_0{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_292{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__33{-webkit-background-clip:text;background-clip:text}#Frame_9_0{--f2w-order:1;border-radius:0;width:353px;height:66px;position:absolute;top:66px;left:0}#Frame_8_1{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_295{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__34{-webkit-background-clip:text;background-clip:text}#Frame_2_3{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar_3{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_4,#calendar_1{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_298{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__35{-webkit-background-clip:text;background-clip:text}#Frame_5_1{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_300{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__36{-webkit-background-clip:text;background-clip:text}#Frame_7_1{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock_1{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_305{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__37{-webkit-background-clip:text;background-clip:text}#Frame_10_0{--f2w-order:2;border-radius:0;width:353px;height:66px;position:absolute;top:132px;left:0}#Frame_8_2{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_308{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__38{-webkit-background-clip:text;background-clip:text}#Frame_2_4{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar_5{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_6,#calendar_2{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_311{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__39{-webkit-background-clip:text;background-clip:text}#Frame_5_2{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_313{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__40{-webkit-background-clip:text;background-clip:text}#Frame_7_2{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock_2{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_318{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__41{-webkit-background-clip:text;background-clip:text}#CTA_Button_0{--f2w-order:1;background-color:#000;border-radius:10px;width:353px;height:46px;position:absolute;top:246px;left:20px}#_8_320{text-align:center;color:#f4f5f7;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:16px;font-weight:600;line-height:170%;display:inline;position:absolute;top:9.5px;left:149.5px}#__42{-webkit-background-clip:text;background-clip:text}#image_1632_4{--f2w-order:4;border-radius:0;width:169px;height:169px;position:absolute;top:561px;left:14px}#Frame_33_0{--f2w-order:5;border-radius:0;width:382px;height:473.6px;position:absolute;top:470px;left:calc(50% - 190.5px)}#Frame_3_2{--f2w-order:0;border-radius:0;width:172px;height:31px;position:absolute;top:0;left:0}#_8_324{text-align:left;letter-spacing:.4px;color:#393c47;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:18px;font-weight:600;line-height:170%;display:inline;position:absolute;top:0;left:16px}#__43{-webkit-background-clip:text;background-clip:text}#Frame_31_0{--f2w-order:1;border-radius:0;width:382px;height:221.3px;position:absolute;top:31px;left:0}#Frame_29_3{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28_3{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_3{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__44{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_5{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__45{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_3{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_331{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__46{-webkit-background-clip:text;background-clip:text}#Frame_29_4{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_4{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_4{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__47{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_6{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__48{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_4{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_337{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__49{-webkit-background-clip:text;background-clip:text}#Frame_32_0{--f2w-order:2;border-radius:0;width:382px;height:221.3px;position:absolute;top:252.3px;left:0}#Frame_29_5{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28_5{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_5{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__50{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_7{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__51{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_5{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_344{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__52{-webkit-background-clip:text;background-clip:text}#Frame_29_6{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_6{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_6{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__53{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_8{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__54{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_6{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_350{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__55{-webkit-background-clip:text;background-clip:text}#Rectangle_16_0{--f2w-order:6;background-color:#fff;border-radius:0;width:393px;height:72px;position:absolute;bottom:0;left:4px}#Frame_27_0{--f2w-order:7;border-radius:0;width:310px;height:44px;position:absolute;top:794px;left:calc(50% - 150.5px)}#Frame_23_0{--f2w-order:0;border-radius:0;width:32px;height:44px;position:absolute;top:0;left:0}#vuesax_linear_home_1{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:4px}#vuesax_linear_home_2,#home_1{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#Vector_1,#Vector_2{stroke:var(--FONTS,#4198b3);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:round}#_8_355{text-align:left;color:var(--FONTS,#4198b3);--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:12px;font-weight:600;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__56{-webkit-background-clip:text;background-clip:text}#Frame_24_0{--f2w-order:1;border-radius:0;width:38px;height:44px;position:absolute;top:0;left:80px}#vuesax_linear_receipt_2_1{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:7px}#vuesax_linear_receipt_2_2{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_358{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-.5px}#__57{-webkit-background-clip:text;background-clip:text}#Frame_25_0{--f2w-order:2;border-radius:0;width:62px;height:44px;position:absolute;top:0;left:166px}#vuesax_linear_notification_1{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:19px}#vuesax_linear_notification_2,#notification_0{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_361{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-2px}#__58{-webkit-background-clip:text;background-clip:text}#Frame_26_0{--f2w-order:3;border-radius:0;width:34px;height:44px;position:absolute;top:0;left:276px}#vuesax_linear_profile_1{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:5px}#vuesax_linear_profile_2,#profile_0{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_364{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__59{-webkit-background-clip:text;background-clip:text}#Rectangle_17{--f2w-order:8;background-color:#00000080;border-radius:0;width:393px;height:855px;position:absolute;top:0;left:-1px}#Ride_Green_09_Dates_and_pickup{--f2w-order:9;background-color:#fff;border-radius:34px;width:336px;height:356px;position:absolute;top:calc(50% - 178px);left:calc(50% - 167.5px);overflow:hidden}#November_2026{text-align:left;color:#0b0c15;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:296.6px;font-family:Quicksand,system-ui,sans-serif;font-size:15.1px;font-weight:500;line-height:22.1px;display:inline;position:absolute;top:55.8px;left:29px}#__60{-webkit-background-clip:text;background-clip:text}#November_2027{text-align:left;color:#0b0c15;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:296.6px;font-family:Quicksand,system-ui,sans-serif;font-size:20px;font-weight:700;line-height:22.1px;display:inline;position:absolute;top:33px;left:27px}#__61{-webkit-background-clip:text;background-clip:text}#_0{text-align:left;color:var(--FONTS,#4198b3);--f2w-order:2;aspect-ratio:1.81;-webkit-background-clip:text;background-clip:text;width:auto;height:26px;font-family:Quicksand,system-ui,sans-serif;font-size:17.7px;font-weight:500;line-height:25.7px;display:inline;position:absolute;top:54px;left:251px}#__62{-webkit-background-clip:text;background-clip:text}#M{text-align:center;color:#797c8d;--f2w-order:3;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:33.4px}#__63{-webkit-background-clip:text;background-clip:text}#T{text-align:center;color:#797c8d;--f2w-order:4;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:75px}#__64{-webkit-background-clip:text;background-clip:text}#W{text-align:center;color:#797c8d;--f2w-order:5;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:116.6px}#__65{-webkit-background-clip:text;background-clip:text}#T_0{text-align:center;color:#797c8d;--f2w-order:6;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:158.3px}#__66{-webkit-background-clip:text;background-clip:text}#F{text-align:center;color:#797c8d;--f2w-order:7;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:199.9px}#__67{-webkit-background-clip:text;background-clip:text}#S{text-align:center;color:#797c8d;--f2w-order:8;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:241.5px}#__68{-webkit-background-clip:text;background-clip:text}#S_0{text-align:center;color:#797c8d;--f2w-order:9;-webkit-background-clip:text;background-clip:text;width:35.4px;font-family:Quicksand,system-ui,sans-serif;font-size:10.6px;font-weight:700;line-height:15.1px;display:inline;position:absolute;top:94.7px;left:283.1px}#__69{-webkit-background-clip:text;background-clip:text}#_1{text-align:center;color:#797c8d;--f2w-order:10;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:130.1px;left:283.1px}#__70{-webkit-background-clip:text;background-clip:text}#_2{text-align:center;color:#797c8d;--f2w-order:11;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:33.4px}#__71{-webkit-background-clip:text;background-clip:text}#_3{text-align:center;color:#797c8d;--f2w-order:12;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:75px}#__72{-webkit-background-clip:text;background-clip:text}#_4{text-align:center;color:#797c8d;--f2w-order:13;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:116.6px}#__73{-webkit-background-clip:text;background-clip:text}#_5{text-align:center;color:#797c8d;--f2w-order:14;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:158.3px}#__74{-webkit-background-clip:text;background-clip:text}#_6{text-align:center;color:#797c8d;--f2w-order:15;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:199.9px}#__75{-webkit-background-clip:text;background-clip:text}#_7{text-align:center;color:#797c8d;--f2w-order:16;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:241.5px}#__76{-webkit-background-clip:text;background-clip:text}#_8{text-align:center;color:#797c8d;--f2w-order:17;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:164.7px;left:283.1px}#__77{-webkit-background-clip:text;background-clip:text}#_9{text-align:center;color:#797c8d;--f2w-order:18;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:33.4px}#__78{-webkit-background-clip:text;background-clip:text}#_10{text-align:center;color:#797c8d;--f2w-order:19;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:75px}#__79{-webkit-background-clip:text;background-clip:text}#_11{text-align:center;color:#797c8d;--f2w-order:20;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:116.6px}#__80{-webkit-background-clip:text;background-clip:text}#_12{text-align:center;color:#797c8d;--f2w-order:21;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:158.3px}#__81{-webkit-background-clip:text;background-clip:text}#_13{text-align:center;color:#797c8d;--f2w-order:22;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:199.9px}#__82{-webkit-background-clip:text;background-clip:text}#_14{text-align:center;color:#797c8d;--f2w-order:23;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:241.5px}#__83{-webkit-background-clip:text;background-clip:text}#_15{text-align:center;color:#797c8d;--f2w-order:24;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:199.2px;left:283.1px}#__84{-webkit-background-clip:text;background-clip:text}#_16{text-align:center;color:#797c8d;--f2w-order:25;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:33.4px}#__85{-webkit-background-clip:text;background-clip:text}#_17{text-align:center;color:#797c8d;--f2w-order:26;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:75px}#__86{-webkit-background-clip:text;background-clip:text}#_18{text-align:center;color:#797c8d;--f2w-order:27;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:116.6px}#__87{-webkit-background-clip:text;background-clip:text}#_19{text-align:center;color:#797c8d;--f2w-order:28;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:158.3px}#__88{-webkit-background-clip:text;background-clip:text}#Selected_date{--f2w-order:29;border-radius:7.1px;width:33.6px;height:30.1px;position:absolute;top:228.4px;left:199.9px;overflow:hidden}#_20{text-align:center;color:#0b0b0b;--f2w-order:30;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:199.9px}#__89{-webkit-background-clip:text;background-clip:text}#Selected_date_0{background-color:var(--FONTS,#4198b3);--f2w-order:31;border-radius:7.1px;width:33.6px;height:30.1px;position:absolute;top:228.4px;left:241.5px;overflow:hidden}#_21{text-align:center;color:#fff;--f2w-order:32;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:700;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:241.5px}#__90{-webkit-background-clip:text;background-clip:text}#_22{text-align:center;color:#0b0c15;--f2w-order:33;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:233.7px;left:283.1px}#__91{-webkit-background-clip:text;background-clip:text}#_23{text-align:center;color:#0b0c15;--f2w-order:34;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:33.4px}#__92{-webkit-background-clip:text;background-clip:text}#_24{text-align:center;color:#0b0c15;--f2w-order:35;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:75px}#__93{-webkit-background-clip:text;background-clip:text}#_25{text-align:center;color:#0b0c15;--f2w-order:36;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:116.6px}#__94{-webkit-background-clip:text;background-clip:text}#_26{text-align:center;color:#0b0c15;--f2w-order:37;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:158.3px}#__95{-webkit-background-clip:text;background-clip:text}#_27{text-align:center;color:#0b0c15;--f2w-order:38;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:199.9px}#__96{-webkit-background-clip:text;background-clip:text}#_28{text-align:center;color:#0b0c15;--f2w-order:39;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:241.5px}#__97{-webkit-background-clip:text;background-clip:text}#_29{text-align:center;color:#0b0c15;--f2w-order:40;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:268.3px;left:283.1px}#__98{-webkit-background-clip:text;background-clip:text}#_30{text-align:center;color:#0b0c15;--f2w-order:41;-webkit-background-clip:text;background-clip:text;width:33.6px;font-family:Quicksand,system-ui,sans-serif;font-size:11.5px;font-weight:500;line-height:16.8px;display:inline;position:absolute;top:302.8px;left:33.4px}#__99{-webkit-background-clip:text;background-clip:text}#_8_409{text-align:left;color:#000;--f2w-order:42;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:700;line-height:22.1px;display:inline;position:absolute;top:315px;left:274px}#__100{-webkit-background-clip:text;background-clip:text}#Home_1{--f2w-order:2;background-color:#fff;border-radius:0;width:393px;height:852px;position:absolute;top:0;left:924px;overflow:hidden}#Rectangle_7_1{--f2w-order:0;background-color:#1a667d;border-radius:0;width:393px;height:304px;position:absolute;top:-100px;left:0}#Status_Bar_Light_1{--f2w-order:1;width:100%;height:46px;position:absolute;top:0;left:0;right:0}#Frame_15_1{--f2w-order:2;border-radius:0;width:187px;height:52px;position:absolute;top:57px;left:20px}#_8_425{text-align:left;color:#fff;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:20px;font-weight:600;line-height:160%;display:inline;position:absolute;top:0;left:0}#__101{-webkit-background-clip:text;background-clip:text}#_8_426{text-align:left;color:#fff;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:32px;left:0}#__102{-webkit-background-clip:text;background-clip:text}#Frame_11_1{--f2w-order:3;background-color:#fff;border-radius:24px;width:393px;height:312px;position:absolute;top:158px;left:0}#Frame_12_1{--f2w-order:0;border-radius:0;width:353px;height:198px;position:absolute;top:20px;left:20px}#Frame_3_3{--f2w-order:0;border-radius:0;width:353px;height:66px;position:absolute;top:0;left:0}#_8_430{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__103{-webkit-background-clip:text;background-clip:text}#Frame_2_5{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:211px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_map_3{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_map_4,#map_1{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_433{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__104{-webkit-background-clip:text;background-clip:text}#Frame_9_1{--f2w-order:1;border-radius:0;width:353px;height:66px;position:absolute;top:66px;left:0}#Frame_8_3{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_436{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__105{-webkit-background-clip:text;background-clip:text}#Frame_2_6{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar_7{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_8,#calendar_3{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_439{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__106{-webkit-background-clip:text;background-clip:text}#Frame_5_3{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_441{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__107{-webkit-background-clip:text;background-clip:text}#Frame_7_3{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock_3{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_446{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__108{-webkit-background-clip:text;background-clip:text}#Frame_10_1{--f2w-order:2;border-radius:0;width:353px;height:66px;position:absolute;top:132px;left:0}#Frame_8_4{--f2w-order:0;border-radius:0;width:200px;height:66px;position:absolute;top:0;left:0}#_8_449{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__109{-webkit-background-clip:text;background-clip:text}#Frame_2_7{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:200px;height:40px;position:absolute;top:26px;left:0}#vuesax_linear_calendar_9{--f2w-order:0;border-radius:0;width:20px;height:20px;position:absolute;top:9px;left:11px}#vuesax_linear_calendar_10,#calendar_4{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_452{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__110{-webkit-background-clip:text;background-clip:text}#Frame_5_4{--f2w-order:1;border-radius:0;width:137px;height:66px;position:absolute;top:0;left:216px}#_8_454{text-align:left;color:var(--Grays-Black,#000);--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:0;left:0}#__111{-webkit-background-clip:text;background-clip:text}#Frame_7_4{--f2w-order:1;border:1px solid #e0e2eb;border-radius:8px;width:137px;height:40px;position:absolute;top:26px;left:0}#clock_4{--f2w-order:0;aspect-ratio:1;width:auto;height:20px;position:absolute;top:9px;left:11px}#_8_459{text-align:left;color:#393c47;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:170%;display:inline;position:absolute;top:7px;left:39px}#__112{-webkit-background-clip:text;background-clip:text}#CTA_Button_1{--f2w-order:1;background-color:#000;border-radius:10px;width:353px;height:46px;position:absolute;top:246px;left:20px}#_8_461{text-align:center;color:#f4f5f7;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:16px;font-weight:600;line-height:170%;display:inline;position:absolute;top:9.5px;left:149.5px}#__113{-webkit-background-clip:text;background-clip:text}#image_1632_9{--f2w-order:4;border-radius:0;width:169px;height:169px;position:absolute;top:561px;left:14px}#Frame_33_1{--f2w-order:5;border-radius:0;width:382px;height:473.6px;position:absolute;top:470px;left:calc(50% - 190.5px)}#Frame_3_4{--f2w-order:0;border-radius:0;width:172px;height:31px;position:absolute;top:0;left:0}#_8_465{text-align:left;letter-spacing:.4px;color:#393c47;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:18px;font-weight:600;line-height:170%;display:inline;position:absolute;top:0;left:16px}#__114{-webkit-background-clip:text;background-clip:text}#Frame_31_1{--f2w-order:1;border-radius:0;width:382px;height:221.3px;position:absolute;top:31px;left:0}#Frame_29_7{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28_7{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_7{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__115{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_10{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__116{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_7{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_472{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__117{-webkit-background-clip:text;background-clip:text}#Frame_29_8{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_8{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_8{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__118{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_11{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__119{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_8{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_478{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__120{-webkit-background-clip:text;background-clip:text}#Frame_32_1{--f2w-order:2;border-radius:0;width:382px;height:221.3px;position:absolute;top:252.3px;left:0}#Frame_29_9{--f2w-order:0;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(50% - 181px)}#Frame_28_9{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_9{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__121{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#image_1632_12{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__122{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_9{--f2w-order:2;border-radius:0;width:115.1px;height:10.5px;position:absolute;top:172.2px;left:16.8px}#_8_485{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:115.1px;height:10.5px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__123{-webkit-background-clip:text;background-clip:text}#Frame_29_10{--f2w-order:1;border-radius:0;width:192px;height:221.3px;position:absolute;top:0;left:calc(6px + 50%)}#Frame_28_10{border-style:solid;border-width:1px;border-color:var(--strock,#e4e4e459);--f2w-order:0;background-color:#fff;border-radius:14.7px;width:180px;height:209.3px;position:absolute;top:6px;left:0;overflow:hidden}#Rectangle_15_10{--f2w-order:0;border-radius:11.3px;width:160.4px;height:175px;position:absolute;top:-3.1px;left:8.1px;overflow:hidden}#__124{object-fit:contain;width:100%;height:100%;position:absolute;inset:0}#image_1632_13{--f2w-order:1;aspect-ratio:1.33;border-radius:0;width:auto;height:35.5px;position:absolute;top:13.1px;left:131.8px;overflow:hidden}#__125{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}#Frame_30_10{--f2w-order:2;border-radius:0;width:138px;height:11px;position:absolute;top:172.2px;left:16.8px}#_8_491{text-align:left;color:#121212;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:138px;height:11px;font-family:Poppins,system-ui,sans-serif;font-size:12.6px;font-weight:700;display:inline;position:absolute;top:0;left:0}#__126{-webkit-background-clip:text;background-clip:text}#Rectangle_16_1{--f2w-order:6;background-color:#fff;border-radius:0;width:393px;height:72px;position:absolute;bottom:0;left:4px}#Frame_27_1{--f2w-order:7;border-radius:0;width:310px;height:44px;position:absolute;top:794px;left:calc(50% - 150.5px)}#Frame_23_1{--f2w-order:0;border-radius:0;width:32px;height:44px;position:absolute;top:0;left:0}#vuesax_linear_home_3{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:4px}#vuesax_linear_home_4,#home_3{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#Vector_3,#Vector_4{stroke:var(--FONTS,#4198b3);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:round}#_8_496{text-align:left;color:var(--FONTS,#4198b3);--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:General Sans,system-ui,sans-serif;font-size:12px;font-weight:600;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__127{-webkit-background-clip:text;background-clip:text}#Frame_24_1{--f2w-order:1;border-radius:0;width:38px;height:44px;position:absolute;top:0;left:80px}#vuesax_linear_receipt_2_3{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:7px}#vuesax_linear_receipt_2_4{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_499{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-.5px}#__128{-webkit-background-clip:text;background-clip:text}#Frame_25_1{--f2w-order:2;border-radius:0;width:62px;height:44px;position:absolute;top:0;left:166px}#vuesax_linear_notification_3{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:19px}#vuesax_linear_notification_4,#notification_1{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_502{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-2px}#__129{-webkit-background-clip:text;background-clip:text}#Frame_26_1{--f2w-order:3;border-radius:0;width:34px;height:44px;position:absolute;top:0;left:276px}#vuesax_linear_profile_3{--f2w-order:0;border-radius:0;width:24px;height:24px;position:absolute;top:0;left:5px}#vuesax_linear_profile_4,#profile_1{--f2w-order:0;width:100%;height:100%;position:absolute;inset:0}#_8_505{text-align:left;color:#aaaebb;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Quicksand,system-ui,sans-serif;font-size:12px;font-weight:500;line-height:170%;display:inline;position:absolute;top:24px;left:-1.5px}#__130{-webkit-background-clip:text;background-clip:text}#Rectangle_17_0{--f2w-order:8;background-color:#00000080;border-radius:0;width:393px;height:855px;position:absolute;top:-1px;left:0}#Frame_35{--f2w-order:9;border-radius:0;width:395px;height:293px;position:absolute;top:561px;left:-2px}#Rectangle_18{--f2w-order:0;background-color:#fff;border-radius:15px 15px 0 0;width:395px;height:313px;position:absolute;top:-20px;left:0}#_8_509{text-align:left;color:#000;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:max-content;font-family:Poppins,system-ui,sans-serif;font-size:16px;font-weight:500;display:inline;position:absolute;top:13px;left:calc(50% - 64.5px)}#__131{-webkit-background-clip:text;background-clip:text}#Frame_35_0{--f2w-order:2;border:0 solid #0000004a;border-bottom-width:.5px;border-radius:0;width:385px;height:58.5px;position:absolute;top:64px;left:0}#_8_511{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:500;display:inline;position:absolute;top:10px;left:10px}#__132{-webkit-background-clip:text;background-clip:text}#_8_512{text-align:left;color:#625a5a;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:400;display:inline;position:absolute;top:30px;left:10px}#__133{-webkit-background-clip:text;background-clip:text}#Frame_36{--f2w-order:3;border:0 solid #0000004a;border-bottom-width:.5px;border-radius:0;width:385px;height:58.5px;position:absolute;top:136px;left:0}#_8_514{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:500;display:inline;position:absolute;top:10px;left:10px}#__134{-webkit-background-clip:text;background-clip:text}#_8_515{text-align:left;color:#625a5a;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:400;display:inline;position:absolute;top:30px;left:10px}#__135{-webkit-background-clip:text;background-clip:text}#Frame_37{--f2w-order:4;border:0 solid #0000004a;border-bottom-width:.5px;border-radius:0;width:385px;height:58.5px;position:absolute;top:208px;left:0}#_8_517{text-align:left;color:#000;--f2w-order:0;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:500;display:inline;position:absolute;top:10px;left:10px}#__136{-webkit-background-clip:text;background-clip:text}#_8_518{text-align:left;color:#625a5a;--f2w-order:1;-webkit-background-clip:text;background-clip:text;width:365px;font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:400;display:inline;position:absolute;top:30px;left:10px}#__137{-webkit-background-clip:text;background-clip:text}#x-circle{--f2w-order:5;width:24px;height:24px;position:absolute;top:-64px;left:calc(50% - 11.5px)}
+    </style>
+    <style>
+      @font-face{src:url(/__assets/GeneralSans-Semibold-600.woff2)format("woff2");font-family:General Sans;font-style:normal;font-weight:600;font-display:swap}
+    </style>
+  <style>
+html,body{background:#fff}
+#_{display:block;min-height:100vh;overflow-x:hidden}
+#Frame_38{width:393px!important;min-width:393px!important;max-width:393px!important;margin:0 auto;transform-origin:top left}
+#Home,#Home_0,#Home_1{left:0!important;display:none}
+[data-act]{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#Frame_38 [id^=Frame_29_] *{pointer-events:none}
+#Ride_Green_09_Dates_and_pickup>span{pointer-events:auto!important}
+#toast{position:absolute;left:50%;bottom:90px;transform:translate(-50%,20px);background:#000;color:#fff;font:500 13px/1.4 Quicksand,sans-serif;padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;z-index:60;pointer-events:none;width:max-content;max-width:340px;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#ov{position:absolute;inset:0;z-index:50;display:none;font-family:Quicksand,sans-serif}
+#ov.on{display:block}
+#ov .bg{position:absolute;inset:0;background:#00000080}
+#ov .sh{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:15px 15px 0 0;padding:20px;max-height:80%;overflow:auto}
+#ov h3{font:600 16px Quicksand,sans-serif;margin-bottom:12px;color:#000}
+#ov .r{display:flex;justify-content:space-between;font:500 14px/170% Quicksand,sans-serif;color:#393c47;border-bottom:.5px solid #0000004a;padding:8px 0}
+#ov .r b{color:#000;font-weight:600}
+#ov .btn{background:#000;color:#fff;border-radius:10px;height:46px;display:flex;align-items:center;justify-content:center;font:600 14px Quicksand,sans-serif;margin-top:16px;cursor:pointer}
+#ov .btn.g{background:#fff;color:#1a667d;border:1px solid #1a667d;margin-top:8px}
+#ov .o{padding:12px 0;border-bottom:.5px solid #0000004a;font:500 13px/150% Quicksand,sans-serif;color:#393c47}
+#ov .o b{display:block;color:#000;font-size:14px}
+.pk{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;top:0}
+</style></head>
+  <body id="_">
+    <div id="Frame_38">
+      <div id="Home">
+        <div id="Rectangle_7" class="pointer-events-none">
+        </div>
+        <svg preserveAspectRatio="none" id="Status_Bar_Light" class="pointer-events-none" width="393" height="46" viewBox="0 0 393 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H361.568C363.909 16.5281 365.806 18.4255 365.806 20.766V26.0635C365.806 28.404 363.909 30.3014 361.568 30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill-rule="evenodd" clip-rule="evenodd" fill="#C1C5D7">
+          </path>
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H359.45V30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill="#F4F5F7">
+          </path>
+          <path d="M366.866 21.6218V25.9213C367.731 25.5571 368.294 24.71 368.294 23.7715C368.294 22.833 367.731 21.986 366.866 21.6218" fill="#F4F5F7">
+          </path>
+          <path d="M347.91 27.1228L351.092 21.0338V20.9407H347.326V19.6525H352.664V20.9562L349.545 27.1228H347.91Z" fill="#121212">
+          </path>
+          <path d="M356.903 27.3142C356.361 27.3142 355.878 27.1987 355.454 26.9676C355.034 26.7365 354.696 26.402 354.44 25.964C354.023 25.3225 353.814 24.4827 353.814 23.4446C353.814 22.2064 354.09 21.2338 354.642 20.5268C355.194 19.8198 355.956 19.4663 356.929 19.4663C357.639 19.4663 358.244 19.6577 358.744 20.0405C359.248 20.4234 359.553 20.9269 359.66 21.5511H358.113C358.041 21.3063 357.896 21.1114 357.679 20.9666C357.465 20.8217 357.211 20.7493 356.918 20.7493C356.408 20.7493 356.006 20.9786 355.713 21.4373C355.423 21.8926 355.287 22.5082 355.304 23.2842H355.397C355.566 22.9324 355.816 22.6617 356.148 22.472C356.482 22.2789 356.867 22.1823 357.301 22.1823C358.008 22.1823 358.594 22.4168 359.06 22.8859C359.526 23.3549 359.758 23.9464 359.758 24.6603C359.758 25.4363 359.491 26.0726 358.957 26.5692C358.422 27.0659 357.737 27.3142 356.903 27.3142ZM355.925 25.6484C356.184 25.9036 356.504 26.0312 356.887 26.0312C357.27 26.0312 357.591 25.9053 357.85 25.6536C358.112 25.3983 358.243 25.0828 358.243 24.7069C358.243 24.3275 358.115 24.0136 357.86 23.7653C357.605 23.5135 357.282 23.3877 356.892 23.3877C356.503 23.3877 356.179 23.5118 355.92 23.7601C355.665 24.0085 355.537 24.3189 355.537 24.6913C355.537 25.0707 355.666 25.3897 355.925 25.6484Z" fill="#121212">
+          </path>
+          <path d="M326.85 25.6265C328.281 24.3912 330.376 24.3912 331.807 25.6265C331.879 25.6928 331.921 25.7863 331.923 25.8853C331.925 25.9843 331.887 26.0805 331.818 26.1499L329.578 28.4575C329.512 28.5253 329.422 28.563 329.329 28.563C329.235 28.5629 329.146 28.5251 329.081 28.4575L326.839 26.1499C326.77 26.0805 326.732 25.9843 326.734 25.8853C326.736 25.7864 326.778 25.6928 326.85 25.6265ZM323.821 22.8638C326.903 19.9369 331.678 19.937 334.76 22.8638C334.83 22.9323 334.87 23.0268 334.871 23.1255C334.872 23.2243 334.833 23.3201 334.765 23.3901L333.47 24.7251C333.337 24.8615 333.121 24.8647 332.984 24.7319C331.972 23.7964 330.655 23.2778 329.29 23.2778C327.925 23.2784 326.609 23.7969 325.597 24.7319C325.46 24.8647 325.244 24.8615 325.111 24.7251L323.816 23.3901C323.748 23.3202 323.71 23.2243 323.711 23.1255C323.712 23.0268 323.751 22.9323 323.821 22.8638ZM320.796 20.1069C325.524 15.4821 332.984 15.4819 337.711 20.1069C337.78 20.1756 337.818 20.2698 337.819 20.3677C337.819 20.4655 337.782 20.5599 337.714 20.6294L336.418 21.9653C336.284 22.1023 336.067 22.1032 335.931 21.9683C334.13 20.2203 331.739 19.2457 329.253 19.2456C326.768 19.2457 324.377 20.2203 322.576 21.9683C322.44 22.1034 322.223 22.1025 322.089 21.9653L320.793 20.6294C320.725 20.5599 320.688 20.4655 320.688 20.3677C320.689 20.2697 320.728 20.1756 320.796 20.1069Z" fill="#F4F5F7">
+          </path>
+          <path d="M307.709 19.6613C307.709 19.1047 308.16 18.6536 308.717 18.6536H309.724C310.281 18.6536 310.732 19.1047 310.732 19.6613V27.7228C310.732 28.2793 310.281 28.7305 309.724 28.7305H308.717C308.16 28.7305 307.709 28.2793 307.709 27.7228V19.6613Z" fill="#F4F5F7">
+          </path>
+          <path d="M312.747 17.6459C312.747 17.0893 313.199 16.6382 313.755 16.6382H314.763C315.319 16.6382 315.77 17.0893 315.77 17.6459V27.7228C315.77 28.2793 315.319 28.7305 314.763 28.7305H313.755C313.199 28.7305 312.747 28.2793 312.747 27.7228V17.6459Z" fill="#F4F5F7">
+          </path>
+          <path d="M302.67 23.1882C302.67 22.6317 303.122 22.1805 303.678 22.1805H304.686C305.242 22.1805 305.694 22.6317 305.694 23.1882V27.7228C305.694 28.2793 305.242 28.7305 304.686 28.7305H303.678C303.122 28.7305 302.67 28.2793 302.67 27.7228V23.1882Z" fill="#F4F5F7">
+          </path>
+          <path d="M297.632 25.7074C297.632 25.1509 298.083 24.6997 298.64 24.6997H299.647C300.204 24.6997 300.655 25.1509 300.655 25.7074V27.7228C300.655 28.2793 300.204 28.7305 299.647 28.7305H298.64C298.083 28.7305 297.632 28.2793 297.632 27.7228V25.7074Z" fill="#F4F5F7">
+          </path>
+          <path d="M47.2175 31.0898C45.9109 31.0898 44.8386 30.7324 44.0007 30.0176C43.1628 29.3027 42.7175 28.3828 42.6648 27.2578H44.7917C44.8621 27.8379 45.1228 28.3066 45.574 28.6641C46.0251 29.0215 46.5789 29.2002 47.2351 29.2002C47.9792 29.2002 48.5798 28.9717 49.0369 28.5146C49.4998 28.0518 49.7312 27.4424 49.7312 26.6865C49.7312 25.9307 49.4998 25.3184 49.0369 24.8496C48.5798 24.375 47.9851 24.1377 47.2527 24.1377C46.7371 24.1377 46.2771 24.2461 45.8728 24.4629C45.4744 24.6797 45.158 24.9873 44.9236 25.3857H42.8669L43.5261 18.0908H51.1638V20.0068H45.2839L44.9763 23.5664H45.1257C45.7117 22.7754 46.6052 22.3799 47.8064 22.3799C49.0076 22.3799 49.9919 22.7783 50.7595 23.5752C51.533 24.3721 51.9197 25.3916 51.9197 26.6338C51.9197 27.958 51.4861 29.0332 50.6189 29.8594C49.7576 30.6797 48.6238 31.0898 47.2175 31.0898ZM55.9363 29.4287C55.5261 29.4287 55.1892 29.2969 54.9255 29.0332C54.6619 28.7695 54.53 28.4385 54.53 28.04C54.53 27.6357 54.6619 27.3047 54.9255 27.0469C55.1892 26.7832 55.5261 26.6514 55.9363 26.6514C56.3523 26.6514 56.6892 26.7832 56.947 27.0469C57.2107 27.3047 57.3425 27.6357 57.3425 28.04C57.3425 28.4385 57.2107 28.7695 56.947 29.0332C56.6892 29.2969 56.3523 29.4287 55.9363 29.4287ZM55.9363 22.8369C55.5261 22.8369 55.1892 22.708 54.9255 22.4502C54.6619 22.1865 54.53 21.8555 54.53 21.457C54.53 21.0527 54.6619 20.7217 54.9255 20.4639C55.1892 20.2002 55.5261 20.0684 55.9363 20.0684C56.3523 20.0684 56.6892 20.2002 56.947 20.4639C57.2107 20.7217 57.3425 21.0527 57.3425 21.457C57.3425 21.8555 57.2107 22.1865 56.947 22.4502C56.6892 22.708 56.3523 22.8369 55.9363 22.8369ZM63.2839 30.7734V20.376H63.1345L59.9792 22.5908V20.4111L63.2927 18.0908H65.5515V30.7734H63.2839ZM72.0642 25.1484V23.3906H73.6111C74.2556 23.3906 74.78 23.2148 75.1843 22.8633C75.5886 22.5059 75.7908 22.043 75.7908 21.4746C75.7908 20.9121 75.5916 20.4639 75.1931 20.1299C74.8005 19.79 74.2732 19.6201 73.6111 19.6201C72.9548 19.6201 72.4216 19.793 72.0115 20.1387C71.6072 20.4844 71.3845 20.9561 71.3435 21.5537H69.2253C69.2839 20.3877 69.7117 19.4678 70.5085 18.7939C71.3054 18.1143 72.363 17.7744 73.6814 17.7744C74.9119 17.7744 75.9343 18.0967 76.7488 18.7412C77.5691 19.3799 77.9792 20.1855 77.9792 21.1582C77.9792 21.9023 77.7712 22.5381 77.3552 23.0654C76.9451 23.5928 76.3884 23.9297 75.6853 24.0762V24.2256C76.5525 24.3252 77.2351 24.6504 77.7332 25.2012C78.2371 25.752 78.489 26.4492 78.489 27.293C78.489 28.3828 78.032 29.2881 77.1179 30.0088C76.2097 30.7295 75.0671 31.0898 73.6902 31.0898C72.325 31.0898 71.2117 30.7412 70.3503 30.0439C69.4949 29.3467 69.0378 28.418 68.9792 27.2578H71.1501C71.197 27.8438 71.4519 28.3125 71.9148 28.6641C72.3777 29.0098 72.9753 29.1826 73.7078 29.1826C74.4343 29.1826 75.0261 28.9951 75.4832 28.6201C75.946 28.2393 76.1775 27.75 76.1775 27.1523C76.1775 26.5312 75.9519 26.042 75.5007 25.6846C75.0496 25.3271 74.4343 25.1484 73.655 25.1484H72.0642Z" fill="#F4F5F7">
+          </path>
+        </svg>
+        <div id="Frame_15">
+          <span id="_8_188" class="pointer-events-none text"><span id="__0">Hello,</span></span>
+          <span id="_8_189" class="pointer-events-none text"><span id="__1">Let’s find your cozy place to stay</span></span>
+        </div>
+        <div id="Frame_11">
+          <div id="Frame_12">
+            <div id="Frame_3">
+              <span id="_8_193" class="pointer-events-none text"><span id="__2">Location</span></span>
+              <div id="Frame_2">
+                <div id="vuesax_linear_map">
+                  <div id="vuesax_linear_map_0">
+                    <svg preserveAspectRatio="none" id="map" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1.90839 6.48323V14.5916C1.90839 16.1749 3.03339 16.8249 4.40005 16.0416L6.35839 14.9249C6.78339 14.6832 7.49172 14.6582 7.93339 14.8832L12.3084 17.0749C12.7501 17.2916 13.4584 17.2749 13.8834 17.0332L17.4917 14.9666C17.9501 14.6999 18.3334 14.0499 18.3334 13.5166V5.40823C18.3334 3.8249 17.2084 3.1749 15.8417 3.95823L13.8834 5.0749C13.4584 5.31657 12.7501 5.34156 12.3084 5.11656L7.93339 2.93323C7.49172 2.71656 6.78339 2.73323 6.35839 2.9749L2.75005 5.04157C2.28339 5.30823 1.90839 5.95823 1.90839 6.48323Z" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M7.13336 3.33325V14.1666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M13.1083 5.5166V16.6666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+                <span id="_8_196" class="pointer-events-none text"><span id="__3">Kalpetta North</span></span>
+              </div>
+            </div>
+            <div id="Frame_9">
+              <div id="Frame_8">
+                <span id="_8_199" class="pointer-events-none text"><span id="__4">Date</span></span>
+                <div id="Frame_2_0">
+                  <div id="vuesax_linear_calendar">
+                    <div id="vuesax_linear_calendar_0">
+                      <svg preserveAspectRatio="none" id="calendar" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66669 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3333 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91669 7.57495H17.0834" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.0789 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.0789 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.99626 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.99626 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91191 11.4167H6.91939" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91191 13.9167H6.91939" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_202" class="pointer-events-none text"><span id="__5">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5">
+                <span id="_8_204" class="pointer-events-none text"><span id="__6">Guest</span></span>
+                <div id="Frame_7">
+                  <svg preserveAspectRatio="none" id="clock" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3334 9.99996C18.3334 14.6023 14.6024 18.3333 10 18.3333C5.39765 18.3333 1.66669 14.6023 1.66669 9.99996C1.66669 5.39759 5.39765 1.66663 10 1.66663C14.6024 1.66663 18.3334 5.39759 18.3334 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_209" class="pointer-events-none text"><span id="__7">10:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_10">
+              <div id="Frame_8_0">
+                <span id="_8_212" class="pointer-events-none text"><span id="__8">Date</span></span>
+                <div id="Frame_2_1">
+                  <div id="vuesax_linear_calendar_1">
+                    <div id="vuesax_linear_calendar_2">
+                      <svg preserveAspectRatio="none" id="calendar_0" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66669 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3333 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91669 7.57495H17.0834" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.0789 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.0789 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.99626 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.99626 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91191 11.4167H6.91939" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91191 13.9167H6.91939" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_215" class="pointer-events-none text"><span id="__9">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5_0">
+                <span id="_8_217" class="pointer-events-none text"><span id="__10">Guest</span></span>
+                <div id="Frame_7_0">
+                  <svg preserveAspectRatio="none" id="clock_0" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3334 9.99996C18.3334 14.6023 14.6024 18.3333 10 18.3333C5.39765 18.3333 1.66669 14.6023 1.66669 9.99996C1.66669 5.39759 5.39765 1.66663 10 1.66663C14.6024 1.66663 18.3334 5.39759 18.3334 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_222" class="pointer-events-none text"><span id="__11">11:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="CTA_Button">
+            <span id="_8_224" class="pointer-events-none text"><span id="__12">Search</span></span>
+          </div>
+        </div>
+        <div id="image_1632" class="pointer-events-none">
+        </div>
+        <div id="Frame_33">
+          <div id="Frame_3_0">
+            <span id="_8_228" class="pointer-events-none text"><span id="__13">Our Collections</span></span>
+          </div>
+          <div id="Frame_31">
+            <div id="Frame_29">
+              <div id="Frame_28">
+                <div id="Rectangle_15" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__14" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_0" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__15" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30">
+                  <span id="_8_235" class="pointer-events-none text"><span id="__16">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_0">
+              <div id="Frame_28_0">
+                <div id="Rectangle_15_0" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__17" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_1" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__18" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_0">
+                  <span id="_8_241" class="pointer-events-none text"><span id="__19">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="Frame_32">
+            <div id="Frame_29_1">
+              <div id="Frame_28_1">
+                <div id="Rectangle_15_1" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__20" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_2" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__21" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_1">
+                  <span id="_8_248" class="pointer-events-none text"><span id="__22">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_2">
+              <div id="Frame_28_2">
+                <div id="Rectangle_15_2" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__23" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_3" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__24" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_2">
+                  <span id="_8_254" class="pointer-events-none text"><span id="__25">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="Rectangle_16" class="pointer-events-none">
+        </div>
+        <div id="Frame_27">
+          <div id="Frame_23">
+            <div id="vuesax_linear_home">
+              <div id="vuesax_linear_home_0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" id="home" class="pointer-events-none">
+                  <g id="home_0">
+                    <path d="M12 18L12 15" id="Vector">
+                    </path>
+                    <path d="M10.07 2.82L3.14 8.37C2.36 8.99 1.86 10.3 2.03 11.28L3.36 19.24C3.6 20.66 4.96 21.81 6.4 21.81L17.6 21.81C19.03 21.81 20.4 20.65 20.64 19.24L21.97 11.28C22.13 10.3 21.63 8.99 20.86 8.37L13.93 2.83C12.86 1.97 11.13 1.97 10.07 2.82Z" id="Vector_0">
+                    </path>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_259" class="pointer-events-none text"><span id="__26">Home</span></span>
+          </div>
+          <div id="Frame_24">
+            <div id="vuesax_linear_receipt_2">
+              <svg preserveAspectRatio="none" id="vuesax_linear_receipt_2_0" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 7.04V16.96C20 18.48 19.86 19.56 19.5 20.33C19.5 20.34 19.49 20.36 19.48 20.37C19.26 20.65 18.97 20.79 18.63 20.79C18.1 20.79 17.46 20.44 16.77 19.7C15.95 18.82 14.69 18.89 13.97 19.85L12.96 21.19C12.56 21.73 12.03 22 11.5 22C10.97 22 10.44 21.73 10.04 21.19L9.02002 19.84C8.31002 18.89 7.05999 18.82 6.23999 19.69L6.22998 19.7C5.09998 20.91 4.10002 21.09 3.52002 20.37C3.51002 20.36 3.5 20.34 3.5 20.33C3.14 19.56 3 18.48 3 16.96V7.04C3 5.52 3.14 4.44 3.5 3.67C3.5 3.66 3.50002 3.65 3.52002 3.64C4.09002 2.91 5.09998 3.09 6.22998 4.3L6.23999 4.31C7.05999 5.18 8.31002 5.11 9.02002 4.16L10.04 2.81C10.44 2.27 10.97 2 11.5 2C12.03 2 12.56 2.27 12.96 2.81L13.97 4.15C14.69 5.11 15.95 5.18 16.77 4.3C17.46 3.56 18.1 3.21 18.63 3.21C18.97 3.21 19.26 3.36 19.48 3.64C19.5 3.65 19.5 3.66 19.5 3.67C19.86 4.44 20 5.52 20 7.04Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 10.25H16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 13.75H14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+              </svg>
+            </div>
+            <span id="_8_262" class="pointer-events-none text"><span id="__27">Orders</span></span>
+          </div>
+          <div id="Frame_25">
+            <div id="vuesax_linear_notification">
+              <div id="vuesax_linear_notification_0">
+                <svg preserveAspectRatio="none" id="notification" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.02 2.91003C8.71003 2.91003 6.02003 5.60003 6.02003 8.91003V11.8C6.02003 12.41 5.76003 13.34 5.45003 13.86L4.30003 15.77C3.59003 16.95 4.08003 18.26 5.38003 18.7C9.69003 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.90002 21.1801C9.36002 20.6401 9.02002 19.8801 9.02002 19.0601" stroke-width="1.5" stroke-miterlimit="10" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_265" class="pointer-events-none text"><span id="__28">Notification</span></span>
+          </div>
+          <div id="Frame_26">
+            <div id="vuesax_linear_profile">
+              <div id="vuesax_linear_profile_0">
+                <svg preserveAspectRatio="none" id="profile" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.16 10.87C12.06 10.86 11.94 10.86 11.83 10.87C9.45 10.79 7.56 8.84 7.56 6.44C7.56 3.99 9.54 2 12 2C14.45 2 16.44 3.99 16.44 6.44C16.43 8.84 14.54 10.79 12.16 10.87Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_268" class="pointer-events-none text"><span id="__29">Profile</span></span>
+          </div>
+        </div>
+      </div>
+      <div id="Home_0">
+        <div id="Rectangle_7_0" class="pointer-events-none">
+        </div>
+        <svg preserveAspectRatio="none" id="Status_Bar_Light_0" class="pointer-events-none" width="393" height="46" viewBox="0 0 393 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H361.568C363.909 16.5281 365.806 18.4255 365.806 20.766V26.0635C365.806 28.404 363.909 30.3014 361.568 30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill-rule="evenodd" clip-rule="evenodd" fill="#C1C5D7">
+          </path>
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H359.45V30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill="#F4F5F7">
+          </path>
+          <path d="M366.866 21.6218V25.9213C367.731 25.5571 368.294 24.71 368.294 23.7715C368.294 22.833 367.731 21.986 366.866 21.6218" fill="#F4F5F7">
+          </path>
+          <path d="M347.91 27.1228L351.092 21.0338V20.9407H347.326V19.6525H352.664V20.9562L349.545 27.1228H347.91Z" fill="#121212">
+          </path>
+          <path d="M356.903 27.3142C356.361 27.3142 355.878 27.1987 355.454 26.9676C355.034 26.7365 354.696 26.402 354.44 25.964C354.023 25.3225 353.814 24.4827 353.814 23.4446C353.814 22.2064 354.09 21.2338 354.642 20.5268C355.194 19.8198 355.956 19.4663 356.929 19.4663C357.639 19.4663 358.244 19.6577 358.744 20.0405C359.248 20.4234 359.553 20.9269 359.66 21.5511H358.113C358.041 21.3063 357.896 21.1114 357.679 20.9666C357.465 20.8217 357.211 20.7493 356.918 20.7493C356.408 20.7493 356.006 20.9786 355.713 21.4373C355.423 21.8926 355.287 22.5082 355.304 23.2842H355.397C355.566 22.9324 355.816 22.6617 356.148 22.472C356.482 22.2789 356.867 22.1823 357.301 22.1823C358.008 22.1823 358.594 22.4168 359.06 22.8859C359.526 23.3549 359.758 23.9464 359.758 24.6603C359.758 25.4363 359.491 26.0726 358.957 26.5692C358.422 27.0659 357.737 27.3142 356.903 27.3142ZM355.925 25.6484C356.184 25.9036 356.504 26.0312 356.887 26.0312C357.27 26.0312 357.591 25.9053 357.85 25.6536C358.112 25.3983 358.243 25.0828 358.243 24.7069C358.243 24.3275 358.115 24.0136 357.86 23.7653C357.605 23.5135 357.282 23.3877 356.892 23.3877C356.503 23.3877 356.179 23.5118 355.92 23.7601C355.665 24.0085 355.537 24.3189 355.537 24.6913C355.537 25.0707 355.666 25.3897 355.925 25.6484Z" fill="#121212">
+          </path>
+          <path d="M326.85 25.6265C328.281 24.3912 330.376 24.3912 331.807 25.6265C331.879 25.6928 331.921 25.7863 331.923 25.8853C331.925 25.9843 331.887 26.0805 331.818 26.1499L329.578 28.4575C329.512 28.5253 329.422 28.563 329.329 28.563C329.235 28.5629 329.146 28.5251 329.081 28.4575L326.839 26.1499C326.77 26.0805 326.732 25.9843 326.734 25.8853C326.736 25.7864 326.778 25.6928 326.85 25.6265ZM323.821 22.8638C326.903 19.9369 331.678 19.937 334.76 22.8638C334.83 22.9323 334.87 23.0268 334.871 23.1255C334.872 23.2243 334.833 23.3201 334.765 23.3901L333.47 24.7251C333.337 24.8615 333.121 24.8647 332.984 24.7319C331.972 23.7964 330.655 23.2778 329.29 23.2778C327.925 23.2784 326.609 23.7969 325.597 24.7319C325.46 24.8647 325.244 24.8615 325.111 24.7251L323.816 23.3901C323.748 23.3202 323.71 23.2243 323.71 23.1255C323.711 23.0268 323.751 22.9323 323.821 22.8638ZM320.796 20.1069C325.524 15.4821 332.984 15.4819 337.711 20.1069C337.78 20.1756 337.818 20.2698 337.819 20.3677C337.819 20.4655 337.782 20.5599 337.714 20.6294L336.417 21.9653C336.284 22.1023 336.067 22.1032 335.931 21.9683C334.13 20.2203 331.739 19.2457 329.253 19.2456C326.768 19.2457 324.377 20.2203 322.576 21.9683C322.44 22.1034 322.223 22.1025 322.089 21.9653L320.792 20.6294C320.725 20.5599 320.687 20.4655 320.688 20.3677C320.689 20.2697 320.728 20.1756 320.796 20.1069Z" fill="#F4F5F7">
+          </path>
+          <path d="M307.709 19.6613C307.709 19.1047 308.16 18.6536 308.717 18.6536H309.724C310.281 18.6536 310.732 19.1047 310.732 19.6613V27.7228C310.732 28.2793 310.281 28.7305 309.724 28.7305H308.717C308.16 28.7305 307.709 28.2793 307.709 27.7228V19.6613Z" fill="#F4F5F7">
+          </path>
+          <path d="M312.747 17.6459C312.747 17.0893 313.199 16.6382 313.755 16.6382H314.763C315.319 16.6382 315.771 17.0893 315.771 17.6459V27.7228C315.771 28.2793 315.319 28.7305 314.763 28.7305H313.755C313.199 28.7305 312.747 28.2793 312.747 27.7228V17.6459Z" fill="#F4F5F7">
+          </path>
+          <path d="M302.671 23.1882C302.671 22.6317 303.122 22.1805 303.678 22.1805H304.686C305.242 22.1805 305.694 22.6317 305.694 23.1882V27.7228C305.694 28.2793 305.242 28.7305 304.686 28.7305H303.678C303.122 28.7305 302.671 28.2793 302.671 27.7228V23.1882Z" fill="#F4F5F7">
+          </path>
+          <path d="M297.632 25.7074C297.632 25.1509 298.083 24.6997 298.64 24.6997H299.647C300.204 24.6997 300.655 25.1509 300.655 25.7074V27.7228C300.655 28.2793 300.204 28.7305 299.647 28.7305H298.64C298.083 28.7305 297.632 28.2793 297.632 27.7228V25.7074Z" fill="#F4F5F7">
+          </path>
+          <path d="M47.2175 31.0898C45.9109 31.0898 44.8386 30.7324 44.0007 30.0176C43.1628 29.3027 42.7175 28.3828 42.6648 27.2578H44.7917C44.8621 27.8379 45.1228 28.3066 45.574 28.6641C46.0251 29.0215 46.5789 29.2002 47.2351 29.2002C47.9792 29.2002 48.5798 28.9717 49.0369 28.5146C49.4998 28.0518 49.7312 27.4424 49.7312 26.6865C49.7312 25.9307 49.4998 25.3184 49.0369 24.8496C48.5798 24.375 47.9851 24.1377 47.2527 24.1377C46.7371 24.1377 46.2771 24.2461 45.8728 24.4629C45.4744 24.6797 45.158 24.9873 44.9236 25.3857H42.8669L43.5261 18.0908H51.1638V20.0068H45.2839L44.9763 23.5664H45.1257C45.7117 22.7754 46.6052 22.3799 47.8064 22.3799C49.0076 22.3799 49.9919 22.7783 50.7595 23.5752C51.533 24.3721 51.9197 25.3916 51.9197 26.6338C51.9197 27.958 51.4861 29.0332 50.6189 29.8594C49.7576 30.6797 48.6238 31.0898 47.2175 31.0898ZM55.9363 29.4287C55.5261 29.4287 55.1892 29.2969 54.9255 29.0332C54.6619 28.7695 54.53 28.4385 54.53 28.04C54.53 27.6357 54.6619 27.3047 54.9255 27.0469C55.1892 26.7832 55.5261 26.6514 55.9363 26.6514C56.3523 26.6514 56.6892 26.7832 56.947 27.0469C57.2107 27.3047 57.3425 27.6357 57.3425 28.04C57.3425 28.4385 57.2107 28.7695 56.947 29.0332C56.6892 29.2969 56.3523 29.4287 55.9363 29.4287ZM55.9363 22.8369C55.5261 22.8369 55.1892 22.708 54.9255 22.4502C54.6619 22.1865 54.53 21.8555 54.53 21.457C54.53 21.0527 54.6619 20.7217 54.9255 20.4639C55.1892 20.2002 55.5261 20.0684 55.9363 20.0684C56.3523 20.0684 56.6892 20.2002 56.947 20.4639C57.2107 20.7217 57.3425 21.0527 57.3425 21.457C57.3425 21.8555 57.2107 22.1865 56.947 22.4502C56.6892 22.708 56.3523 22.8369 55.9363 22.8369ZM63.2839 30.7734V20.376H63.1345L59.9792 22.5908V20.4111L63.2927 18.0908H65.5515V30.7734H63.2839ZM72.0642 25.1484V23.3906H73.6111C74.2556 23.3906 74.78 23.2148 75.1843 22.8633C75.5886 22.5059 75.7908 22.043 75.7908 21.4746C75.7908 20.9121 75.5916 20.4639 75.1931 20.1299C74.8005 19.79 74.2732 19.6201 73.6111 19.6201C72.9548 19.6201 72.4216 19.793 72.0115 20.1387C71.6072 20.4844 71.3845 20.9561 71.3435 21.5537H69.2253C69.2839 20.3877 69.7117 19.4678 70.5085 18.7939C71.3054 18.1143 72.363 17.7744 73.6814 17.7744C74.9119 17.7744 75.9343 18.0967 76.7488 18.7412C77.5691 19.3799 77.9792 20.1855 77.9792 21.1582C77.9792 21.9023 77.7712 22.5381 77.3552 23.0654C76.9451 23.5928 76.3884 23.9297 75.6853 24.0762V24.2256C76.5525 24.3252 77.2351 24.6504 77.7332 25.2012C78.2371 25.752 78.489 26.4492 78.489 27.293C78.489 28.3828 78.032 29.2881 77.1179 30.0088C76.2097 30.7295 75.0671 31.0898 73.6902 31.0898C72.325 31.0898 71.2117 30.7412 70.3503 30.0439C69.4949 29.3467 69.0378 28.418 68.9792 27.2578H71.1501C71.197 27.8438 71.4519 28.3125 71.9148 28.6641C72.3777 29.0098 72.9753 29.1826 73.7078 29.1826C74.4343 29.1826 75.0261 28.9951 75.4832 28.6201C75.946 28.2393 76.1775 27.75 76.1775 27.1523C76.1775 26.5312 75.9519 26.042 75.5007 25.6846C75.0496 25.3271 74.4343 25.1484 73.655 25.1484H72.0642Z" fill="#F4F5F7">
+          </path>
+        </svg>
+        <div id="Frame_15_0">
+          <span id="_8_284" class="pointer-events-none text"><span id="__30">Hello, Rachel 👋</span></span>
+          <span id="_8_285" class="pointer-events-none text"><span id="__31">Let’s find your cozy place to stay</span></span>
+        </div>
+        <div id="Frame_11_0">
+          <div id="Frame_12_0">
+            <div id="Frame_3_1">
+              <span id="_8_289" class="pointer-events-none text"><span id="__32">Location</span></span>
+              <div id="Frame_2_2">
+                <div id="vuesax_linear_map_1">
+                  <div id="vuesax_linear_map_2">
+                    <svg preserveAspectRatio="none" id="map_0" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1.90833 6.48323V14.5916C1.90833 16.1749 3.03333 16.8249 4.39999 16.0416L6.35833 14.9249C6.78333 14.6832 7.49166 14.6582 7.93333 14.8832L12.3083 17.0749C12.75 17.2916 13.4583 17.2749 13.8833 17.0332L17.4917 14.9666C17.95 14.6999 18.3333 14.0499 18.3333 13.5166V5.40823C18.3333 3.8249 17.2083 3.1749 15.8417 3.95823L13.8833 5.0749C13.4583 5.31657 12.75 5.34156 12.3083 5.11656L7.93333 2.93323C7.49166 2.71656 6.78333 2.73323 6.35833 2.9749L2.74999 5.04157C2.28333 5.30823 1.90833 5.95823 1.90833 6.48323Z" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M7.13342 3.33325V14.1666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M13.1083 5.5166V16.6666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+                <span id="_8_292" class="pointer-events-none text"><span id="__33">Kalpetta North</span></span>
+              </div>
+            </div>
+            <div id="Frame_9_0">
+              <div id="Frame_8_1">
+                <span id="_8_295" class="pointer-events-none text"><span id="__34">Date</span></span>
+                <div id="Frame_2_3">
+                  <div id="vuesax_linear_calendar_3">
+                    <div id="vuesax_linear_calendar_4">
+                      <svg preserveAspectRatio="none" id="calendar_1" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66663 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3334 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91663 7.57495H17.0833" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 11.4167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 13.9167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_298" class="pointer-events-none text"><span id="__35">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5_1">
+                <span id="_8_300" class="pointer-events-none text"><span id="__36">Guest</span></span>
+                <div id="Frame_7_1">
+                  <svg preserveAspectRatio="none" id="clock_1" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3333 9.99996C18.3333 14.6023 14.6023 18.3333 9.99996 18.3333C5.39759 18.3333 1.66663 14.6023 1.66663 9.99996C1.66663 5.39759 5.39759 1.66663 9.99996 1.66663C14.6023 1.66663 18.3333 5.39759 18.3333 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_305" class="pointer-events-none text"><span id="__37">10:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_10_0">
+              <div id="Frame_8_2">
+                <span id="_8_308" class="pointer-events-none text"><span id="__38">Date</span></span>
+                <div id="Frame_2_4">
+                  <div id="vuesax_linear_calendar_5">
+                    <div id="vuesax_linear_calendar_6">
+                      <svg preserveAspectRatio="none" id="calendar_2" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66663 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3334 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91663 7.57495H17.0833" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 11.4167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 13.9167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_311" class="pointer-events-none text"><span id="__39">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5_2">
+                <span id="_8_313" class="pointer-events-none text"><span id="__40">Guest</span></span>
+                <div id="Frame_7_2">
+                  <svg preserveAspectRatio="none" id="clock_2" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3333 9.99996C18.3333 14.6023 14.6023 18.3333 9.99996 18.3333C5.39759 18.3333 1.66663 14.6023 1.66663 9.99996C1.66663 5.39759 5.39759 1.66663 9.99996 1.66663C14.6023 1.66663 18.3333 5.39759 18.3333 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_318" class="pointer-events-none text"><span id="__41">11:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="CTA_Button_0">
+            <span id="_8_320" class="pointer-events-none text"><span id="__42">Search</span></span>
+          </div>
+        </div>
+        <div id="image_1632_4" class="pointer-events-none">
+        </div>
+        <div id="Frame_33_0">
+          <div id="Frame_3_2">
+            <span id="_8_324" class="pointer-events-none text"><span id="__43">Our Collections</span></span>
+          </div>
+          <div id="Frame_31_0">
+            <div id="Frame_29_3">
+              <div id="Frame_28_3">
+                <div id="Rectangle_15_3" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__44" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_5" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__45" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_3">
+                  <span id="_8_331" class="pointer-events-none text"><span id="__46">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_4">
+              <div id="Frame_28_4">
+                <div id="Rectangle_15_4" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__47" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_6" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__48" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_4">
+                  <span id="_8_337" class="pointer-events-none text"><span id="__49">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="Frame_32_0">
+            <div id="Frame_29_5">
+              <div id="Frame_28_5">
+                <div id="Rectangle_15_5" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__50" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_7" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__51" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_5">
+                  <span id="_8_344" class="pointer-events-none text"><span id="__52">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_6">
+              <div id="Frame_28_6">
+                <div id="Rectangle_15_6" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__53" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_8" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__54" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_6">
+                  <span id="_8_350" class="pointer-events-none text"><span id="__55">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="Rectangle_16_0" class="pointer-events-none">
+        </div>
+        <div id="Frame_27_0">
+          <div id="Frame_23_0">
+            <div id="vuesax_linear_home_1">
+              <div id="vuesax_linear_home_2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" id="home_1" class="pointer-events-none">
+                  <g id="home_2">
+                    <path d="M12 18L12 15" id="Vector_1">
+                    </path>
+                    <path d="M10.07 2.82L3.14 8.37C2.36 8.99 1.86 10.3 2.03 11.28L3.36 19.24C3.6 20.66 4.96 21.81 6.4 21.81L17.6 21.81C19.03 21.81 20.4 20.65 20.64 19.24L21.97 11.28C22.13 10.3 21.63 8.99 20.86 8.37L13.93 2.83C12.86 1.97 11.13 1.97 10.07 2.82Z" id="Vector_2">
+                    </path>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_355" class="pointer-events-none text"><span id="__56">Home</span></span>
+          </div>
+          <div id="Frame_24_0">
+            <div id="vuesax_linear_receipt_2_1">
+              <svg preserveAspectRatio="none" id="vuesax_linear_receipt_2_2" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 7.04V16.96C20 18.48 19.86 19.56 19.5 20.33C19.5 20.34 19.49 20.36 19.48 20.37C19.26 20.65 18.97 20.79 18.63 20.79C18.1 20.79 17.46 20.44 16.77 19.7C15.95 18.82 14.69 18.89 13.97 19.85L12.96 21.19C12.56 21.73 12.03 22 11.5 22C10.97 22 10.44 21.73 10.04 21.19L9.02002 19.84C8.31002 18.89 7.05999 18.82 6.23999 19.69L6.22998 19.7C5.09998 20.91 4.10002 21.09 3.52002 20.37C3.51002 20.36 3.5 20.34 3.5 20.33C3.14 19.56 3 18.48 3 16.96V7.04C3 5.52 3.14 4.44 3.5 3.67C3.5 3.66 3.50002 3.65 3.52002 3.64C4.09002 2.91 5.09998 3.09 6.22998 4.3L6.23999 4.31C7.05999 5.18 8.31002 5.11 9.02002 4.16L10.04 2.81C10.44 2.27 10.97 2 11.5 2C12.03 2 12.56 2.27 12.96 2.81L13.97 4.15C14.69 5.11 15.95 5.18 16.77 4.3C17.46 3.56 18.1 3.21 18.63 3.21C18.97 3.21 19.26 3.36 19.48 3.64C19.5 3.65 19.5 3.66 19.5 3.67C19.86 4.44 20 5.52 20 7.04Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 10.25H16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 13.75H14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+              </svg>
+            </div>
+            <span id="_8_358" class="pointer-events-none text"><span id="__57">Orders</span></span>
+          </div>
+          <div id="Frame_25_0">
+            <div id="vuesax_linear_notification_1">
+              <div id="vuesax_linear_notification_2">
+                <svg preserveAspectRatio="none" id="notification_0" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.02 2.91003C8.70997 2.91003 6.01997 5.60003 6.01997 8.91003V11.8C6.01997 12.41 5.75997 13.34 5.44997 13.86L4.29997 15.77C3.58997 16.95 4.07997 18.26 5.37997 18.7C9.68997 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.90002 21.1801C9.36002 20.6401 9.02002 19.8801 9.02002 19.0601" stroke-width="1.5" stroke-miterlimit="10" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_361" class="pointer-events-none text"><span id="__58">Notification</span></span>
+          </div>
+          <div id="Frame_26_0">
+            <div id="vuesax_linear_profile_1">
+              <div id="vuesax_linear_profile_2">
+                <svg preserveAspectRatio="none" id="profile_0" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_364" class="pointer-events-none text"><span id="__59">Profile</span></span>
+          </div>
+        </div>
+        <div id="Rectangle_17" class="pointer-events-none">
+        </div>
+        <div id="Ride_Green_09_Dates_and_pickup">
+          <span id="November_2026" class="pointer-events-none text"><span id="__60">November 2026</span></span>
+          <span id="November_2027" class="pointer-events-none text"><span id="__61">Sat,Nov 20</span></span>
+          <span id="_0" class="pointer-events-none text"><span id="__62">‹       ›</span></span>
+          <span id="M" class="pointer-events-none text"><span id="__63">M</span></span>
+          <span id="T" class="pointer-events-none text"><span id="__64">T</span></span>
+          <span id="W" class="pointer-events-none text"><span id="__65">W</span></span>
+          <span id="T_0" class="pointer-events-none text"><span id="__66">T</span></span>
+          <span id="F" class="pointer-events-none text"><span id="__67">F</span></span>
+          <span id="S" class="pointer-events-none text"><span id="__68">S</span></span>
+          <span id="S_0" class="pointer-events-none text"><span id="__69">S</span></span>
+          <span id="_1" class="pointer-events-none text"><span id="__70">1</span></span>
+          <span id="_2" class="pointer-events-none text"><span id="__71">2</span></span>
+          <span id="_3" class="pointer-events-none text"><span id="__72">3</span></span>
+          <span id="_4" class="pointer-events-none text"><span id="__73">4</span></span>
+          <span id="_5" class="pointer-events-none text"><span id="__74">5</span></span>
+          <span id="_6" class="pointer-events-none text"><span id="__75">6</span></span>
+          <span id="_7" class="pointer-events-none text"><span id="__76">7</span></span>
+          <span id="_8" class="pointer-events-none text"><span id="__77">8</span></span>
+          <span id="_9" class="pointer-events-none text"><span id="__78">9</span></span>
+          <span id="_10" class="pointer-events-none text"><span id="__79">10</span></span>
+          <span id="_11" class="pointer-events-none text"><span id="__80">11</span></span>
+          <span id="_12" class="pointer-events-none text"><span id="__81">12</span></span>
+          <span id="_13" class="pointer-events-none text"><span id="__82">13</span></span>
+          <span id="_14" class="pointer-events-none text"><span id="__83">14</span></span>
+          <span id="_15" class="pointer-events-none text"><span id="__84">15</span></span>
+          <span id="_16" class="pointer-events-none text"><span id="__85">16</span></span>
+          <span id="_17" class="pointer-events-none text"><span id="__86">17</span></span>
+          <span id="_18" class="pointer-events-none text"><span id="__87">18</span></span>
+          <span id="_19" class="pointer-events-none text"><span id="__88">19</span></span>
+          <div id="Selected_date" class="pointer-events-none">
+          </div>
+          <span id="_20" class="pointer-events-none text"><span id="__89">20</span></span>
+          <div id="Selected_date_0" class="pointer-events-none">
+          </div>
+          <span id="_21" class="pointer-events-none text"><span id="__90">21</span></span>
+          <span id="_22" class="pointer-events-none text"><span id="__91">22</span></span>
+          <span id="_23" class="pointer-events-none text"><span id="__92">23</span></span>
+          <span id="_24" class="pointer-events-none text"><span id="__93">24</span></span>
+          <span id="_25" class="pointer-events-none text"><span id="__94">25</span></span>
+          <span id="_26" class="pointer-events-none text"><span id="__95">26</span></span>
+          <span id="_27" class="pointer-events-none text"><span id="__96">27</span></span>
+          <span id="_28" class="pointer-events-none text"><span id="__97">28</span></span>
+          <span id="_29" class="pointer-events-none text"><span id="__98">29</span></span>
+          <span id="_30" class="pointer-events-none text"><span id="__99">30</span></span>
+          <span id="_8_409" class="pointer-events-none text"><span id="__100">Done</span></span>
+        </div>
+      </div>
+      <div id="Home_1">
+        <div id="Rectangle_7_1" class="pointer-events-none">
+        </div>
+        <svg preserveAspectRatio="none" id="Status_Bar_Light_1" class="pointer-events-none" width="393" height="46" viewBox="0 0 393 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H361.568C363.909 16.5281 365.806 18.4255 365.806 20.766V26.0635C365.806 28.404 363.909 30.3014 361.568 30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill-rule="evenodd" clip-rule="evenodd" fill="#C1C5D7">
+          </path>
+          <path d="M342.498 20.766C342.498 18.4255 344.395 16.5281 346.736 16.5281H359.45V30.3014H346.736C344.395 30.3014 342.498 28.404 342.498 26.0635V20.766Z" fill="#F4F5F7">
+          </path>
+          <path d="M366.866 21.6218V25.9213C367.731 25.5571 368.294 24.71 368.294 23.7715C368.294 22.833 367.731 21.986 366.866 21.6218" fill="#F4F5F7">
+          </path>
+          <path d="M347.91 27.1228L351.092 21.0338V20.9407H347.326V19.6525H352.664V20.9562L349.545 27.1228H347.91Z" fill="#121212">
+          </path>
+          <path d="M356.903 27.3142C356.361 27.3142 355.878 27.1987 355.454 26.9676C355.034 26.7365 354.696 26.402 354.44 25.964C354.023 25.3225 353.814 24.4827 353.814 23.4446C353.814 22.2064 354.09 21.2338 354.642 20.5268C355.194 19.8198 355.956 19.4663 356.929 19.4663C357.639 19.4663 358.244 19.6577 358.744 20.0405C359.248 20.4234 359.553 20.9269 359.66 21.5511H358.113C358.041 21.3063 357.896 21.1114 357.679 20.9666C357.465 20.8217 357.211 20.7493 356.918 20.7493C356.408 20.7493 356.006 20.9786 355.713 21.4373C355.423 21.8926 355.287 22.5082 355.304 23.2842H355.397C355.566 22.9324 355.816 22.6617 356.148 22.472C356.482 22.2789 356.867 22.1823 357.301 22.1823C358.008 22.1823 358.594 22.4168 359.06 22.8859C359.526 23.3549 359.758 23.9464 359.758 24.6603C359.758 25.4363 359.491 26.0726 358.957 26.5692C358.422 27.0659 357.737 27.3142 356.903 27.3142ZM355.925 25.6484C356.184 25.9036 356.504 26.0312 356.887 26.0312C357.27 26.0312 357.591 25.9053 357.85 25.6536C358.112 25.3983 358.243 25.0828 358.243 24.7069C358.243 24.3275 358.115 24.0136 357.86 23.7653C357.605 23.5135 357.282 23.3877 356.892 23.3877C356.503 23.3877 356.179 23.5118 355.92 23.7601C355.665 24.0085 355.537 24.3189 355.537 24.6913C355.537 25.0707 355.666 25.3897 355.925 25.6484Z" fill="#121212">
+          </path>
+          <path d="M326.85 25.6265C328.281 24.3912 330.376 24.3912 331.807 25.6265C331.879 25.6928 331.921 25.7863 331.923 25.8853C331.925 25.9843 331.887 26.0805 331.818 26.1499L329.578 28.4575C329.512 28.5253 329.422 28.563 329.329 28.563C329.235 28.5629 329.146 28.5251 329.081 28.4575L326.839 26.1499C326.77 26.0805 326.732 25.9843 326.734 25.8853C326.736 25.7864 326.778 25.6928 326.85 25.6265ZM323.821 22.8638C326.903 19.9369 331.678 19.937 334.76 22.8638C334.83 22.9323 334.87 23.0268 334.871 23.1255C334.872 23.2243 334.833 23.3201 334.765 23.3901L333.47 24.7251C333.337 24.8615 333.121 24.8647 332.984 24.7319C331.972 23.7964 330.655 23.2778 329.29 23.2778C327.925 23.2784 326.609 23.7969 325.597 24.7319C325.46 24.8647 325.244 24.8615 325.111 24.7251L323.816 23.3901C323.748 23.3202 323.71 23.2243 323.71 23.1255C323.711 23.0268 323.751 22.9323 323.821 22.8638ZM320.796 20.1069C325.524 15.4821 332.984 15.4819 337.711 20.1069C337.78 20.1756 337.818 20.2698 337.819 20.3677C337.819 20.4655 337.782 20.5599 337.714 20.6294L336.417 21.9653C336.284 22.1023 336.067 22.1032 335.931 21.9683C334.13 20.2203 331.739 19.2457 329.253 19.2456C326.768 19.2457 324.377 20.2203 322.576 21.9683C322.44 22.1034 322.223 22.1025 322.089 21.9653L320.792 20.6294C320.725 20.5599 320.687 20.4655 320.688 20.3677C320.689 20.2697 320.728 20.1756 320.796 20.1069Z" fill="#F4F5F7">
+          </path>
+          <path d="M307.709 19.6613C307.709 19.1047 308.16 18.6536 308.717 18.6536H309.724C310.281 18.6536 310.732 19.1047 310.732 19.6613V27.7228C310.732 28.2793 310.281 28.7305 309.724 28.7305H308.717C308.16 28.7305 307.709 28.2793 307.709 27.7228V19.6613Z" fill="#F4F5F7">
+          </path>
+          <path d="M312.747 17.6459C312.747 17.0893 313.199 16.6382 313.755 16.6382H314.763C315.319 16.6382 315.771 17.0893 315.771 17.6459V27.7228C315.771 28.2793 315.319 28.7305 314.763 28.7305H313.755C313.199 28.7305 312.747 28.2793 312.747 27.7228V17.6459Z" fill="#F4F5F7">
+          </path>
+          <path d="M302.671 23.1882C302.671 22.6317 303.122 22.1805 303.678 22.1805H304.686C305.242 22.1805 305.694 22.6317 305.694 23.1882V27.7228C305.694 28.2793 305.242 28.7305 304.686 28.7305H303.678C303.122 28.7305 302.671 28.2793 302.671 27.7228V23.1882Z" fill="#F4F5F7">
+          </path>
+          <path d="M297.632 25.7074C297.632 25.1509 298.083 24.6997 298.64 24.6997H299.647C300.204 24.6997 300.655 25.1509 300.655 25.7074V27.7228C300.655 28.2793 300.204 28.7305 299.647 28.7305H298.64C298.083 28.7305 297.632 28.2793 297.632 27.7228V25.7074Z" fill="#F4F5F7">
+          </path>
+          <path d="M47.2175 31.0898C45.9109 31.0898 44.8386 30.7324 44.0007 30.0176C43.1628 29.3027 42.7175 28.3828 42.6648 27.2578H44.7917C44.8621 27.8379 45.1228 28.3066 45.574 28.6641C46.0251 29.0215 46.5789 29.2002 47.2351 29.2002C47.9792 29.2002 48.5798 28.9717 49.0369 28.5146C49.4998 28.0518 49.7312 27.4424 49.7312 26.6865C49.7312 25.9307 49.4998 25.3184 49.0369 24.8496C48.5798 24.375 47.9851 24.1377 47.2527 24.1377C46.7371 24.1377 46.2771 24.2461 45.8728 24.4629C45.4744 24.6797 45.158 24.9873 44.9236 25.3857H42.8669L43.5261 18.0908H51.1638V20.0068H45.2839L44.9763 23.5664H45.1257C45.7117 22.7754 46.6052 22.3799 47.8064 22.3799C49.0076 22.3799 49.9919 22.7783 50.7595 23.5752C51.533 24.3721 51.9197 25.3916 51.9197 26.6338C51.9197 27.958 51.4861 29.0332 50.6189 29.8594C49.7576 30.6797 48.6238 31.0898 47.2175 31.0898ZM55.9363 29.4287C55.5261 29.4287 55.1892 29.2969 54.9255 29.0332C54.6619 28.7695 54.53 28.4385 54.53 28.04C54.53 27.6357 54.6619 27.3047 54.9255 27.0469C55.1892 26.7832 55.5261 26.6514 55.9363 26.6514C56.3523 26.6514 56.6892 26.7832 56.947 27.0469C57.2107 27.3047 57.3425 27.6357 57.3425 28.04C57.3425 28.4385 57.2107 28.7695 56.947 29.0332C56.6892 29.2969 56.3523 29.4287 55.9363 29.4287ZM55.9363 22.8369C55.5261 22.8369 55.1892 22.708 54.9255 22.4502C54.6619 22.1865 54.53 21.8555 54.53 21.457C54.53 21.0527 54.6619 20.7217 54.9255 20.4639C55.1892 20.2002 55.5261 20.0684 55.9363 20.0684C56.3523 20.0684 56.6892 20.2002 56.947 20.4639C57.2107 20.7217 57.3425 21.0527 57.3425 21.457C57.3425 21.8555 57.2107 22.1865 56.947 22.4502C56.6892 22.708 56.3523 22.8369 55.9363 22.8369ZM63.2839 30.7734V20.376H63.1345L59.9792 22.5908V20.4111L63.2927 18.0908H65.5515V30.7734H63.2839ZM72.0642 25.1484V23.3906H73.6111C74.2556 23.3906 74.78 23.2148 75.1843 22.8633C75.5886 22.5059 75.7908 22.043 75.7908 21.4746C75.7908 20.9121 75.5916 20.4639 75.1931 20.1299C74.8005 19.79 74.2732 19.6201 73.6111 19.6201C72.9548 19.6201 72.4216 19.793 72.0115 20.1387C71.6072 20.4844 71.3845 20.9561 71.3435 21.5537H69.2253C69.2839 20.3877 69.7117 19.4678 70.5085 18.7939C71.3054 18.1143 72.363 17.7744 73.6814 17.7744C74.9119 17.7744 75.9343 18.0967 76.7488 18.7412C77.5691 19.3799 77.9792 20.1855 77.9792 21.1582C77.9792 21.9023 77.7712 22.5381 77.3552 23.0654C76.9451 23.5928 76.3884 23.9297 75.6853 24.0762V24.2256C76.5525 24.3252 77.2351 24.6504 77.7332 25.2012C78.2371 25.752 78.489 26.4492 78.489 27.293C78.489 28.3828 78.032 29.2881 77.1179 30.0088C76.2097 30.7295 75.0671 31.0898 73.6902 31.0898C72.325 31.0898 71.2117 30.7412 70.3503 30.0439C69.4949 29.3467 69.0378 28.418 68.9792 27.2578H71.1501C71.197 27.8438 71.4519 28.3125 71.9148 28.6641C72.3777 29.0098 72.9753 29.1826 73.7078 29.1826C74.4343 29.1826 75.0261 28.9951 75.4832 28.6201C75.946 28.2393 76.1775 27.75 76.1775 27.1523C76.1775 26.5312 75.9519 26.042 75.5007 25.6846C75.0496 25.3271 74.4343 25.1484 73.655 25.1484H72.0642Z" fill="#F4F5F7">
+          </path>
+        </svg>
+        <div id="Frame_15_1">
+          <span id="_8_425" class="pointer-events-none text"><span id="__101">Hello, Rachel 👋</span></span>
+          <span id="_8_426" class="pointer-events-none text"><span id="__102">Let’s find your cozy place to stay</span></span>
+        </div>
+        <div id="Frame_11_1">
+          <div id="Frame_12_1">
+            <div id="Frame_3_3">
+              <span id="_8_430" class="pointer-events-none text"><span id="__103">Location</span></span>
+              <div id="Frame_2_5">
+                <div id="vuesax_linear_map_3">
+                  <div id="vuesax_linear_map_4">
+                    <svg preserveAspectRatio="none" id="map_1" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1.90833 6.48323V14.5916C1.90833 16.1749 3.03333 16.8249 4.39999 16.0416L6.35833 14.9249C6.78333 14.6832 7.49166 14.6582 7.93333 14.8832L12.3083 17.0749C12.75 17.2916 13.4583 17.2749 13.8833 17.0332L17.4917 14.9666C17.95 14.6999 18.3333 14.0499 18.3333 13.5166V5.40823C18.3333 3.8249 17.2083 3.1749 15.8417 3.95823L13.8833 5.0749C13.4583 5.31657 12.75 5.34156 12.3083 5.11656L7.93333 2.93323C7.49166 2.71656 6.78333 2.73323 6.35833 2.9749L2.74999 5.04157C2.28333 5.30823 1.90833 5.95823 1.90833 6.48323Z" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M7.13342 3.33325V14.1666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                      <path d="M13.1083 5.5166V16.6666" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+                <span id="_8_433" class="pointer-events-none text"><span id="__104">Kalpetta North</span></span>
+              </div>
+            </div>
+            <div id="Frame_9_1">
+              <div id="Frame_8_3">
+                <span id="_8_436" class="pointer-events-none text"><span id="__105">Date</span></span>
+                <div id="Frame_2_6">
+                  <div id="vuesax_linear_calendar_7">
+                    <div id="vuesax_linear_calendar_8">
+                      <svg preserveAspectRatio="none" id="calendar_3" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66663 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3334 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91663 7.57495H17.0833" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 11.4167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 13.9167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_439" class="pointer-events-none text"><span id="__106">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5_3">
+                <span id="_8_441" class="pointer-events-none text"><span id="__107">Guest</span></span>
+                <div id="Frame_7_3">
+                  <svg preserveAspectRatio="none" id="clock_3" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3333 9.99996C18.3333 14.6023 14.6023 18.3333 9.99996 18.3333C5.39759 18.3333 1.66663 14.6023 1.66663 9.99996C1.66663 5.39759 5.39759 1.66663 9.99996 1.66663C14.6023 1.66663 18.3333 5.39759 18.3333 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_446" class="pointer-events-none text"><span id="__108">10:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_10_1">
+              <div id="Frame_8_4">
+                <span id="_8_449" class="pointer-events-none text"><span id="__109">Date</span></span>
+                <div id="Frame_2_7">
+                  <div id="vuesax_linear_calendar_9">
+                    <div id="vuesax_linear_calendar_10">
+                      <svg preserveAspectRatio="none" id="calendar_4" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.66663 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.3334 1.66663V4.16663" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M2.91663 7.57495H17.0833" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M17.5 7.08329V14.1666C17.5 16.6666 16.25 18.3333 13.3333 18.3333H6.66667C3.75 18.3333 2.5 16.6666 2.5 14.1666V7.08329C2.5 4.58329 3.75 2.91663 6.66667 2.91663H13.3333C16.25 2.91663 17.5 4.58329 17.5 7.08329Z" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 11.4167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M13.079 13.9167H13.0864" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 11.4167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M9.9962 13.9167H10.0037" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 11.4167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                        <path d="M6.91197 13.9167H6.91945" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" stroke="#393C47">
+                        </path>
+                      </svg>
+                    </div>
+                  </div>
+                  <span id="_8_452" class="pointer-events-none text"><span id="__110">20 May 2026</span></span>
+                </div>
+              </div>
+              <div id="Frame_5_4">
+                <span id="_8_454" class="pointer-events-none text"><span id="__111">Guest</span></span>
+                <div id="Frame_7_4">
+                  <svg preserveAspectRatio="none" id="clock_4" class="pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3333 9.99996C18.3333 14.6023 14.6023 18.3333 9.99996 18.3333C5.39759 18.3333 1.66663 14.6023 1.66663 9.99996C1.66663 5.39759 5.39759 1.66663 9.99996 1.66663C14.6023 1.66663 18.3333 5.39759 18.3333 9.99996Z" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                    <path d="M10 5V10L13.3333 11.6667" stroke-linecap="round" stroke-linejoin="round" stroke="black">
+                    </path>
+                  </svg>
+                  <span id="_8_459" class="pointer-events-none text"><span id="__112">11:30 AM</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="CTA_Button_1">
+            <span id="_8_461" class="pointer-events-none text"><span id="__113">Search</span></span>
+          </div>
+        </div>
+        <div id="image_1632_9" class="pointer-events-none">
+        </div>
+        <div id="Frame_33_1">
+          <div id="Frame_3_4">
+            <span id="_8_465" class="pointer-events-none text"><span id="__114">Our Collections</span></span>
+          </div>
+          <div id="Frame_31_1">
+            <div id="Frame_29_7">
+              <div id="Frame_28_7">
+                <div id="Rectangle_15_7" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__115" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_10" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__116" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_7">
+                  <span id="_8_472" class="pointer-events-none text"><span id="__117">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_8">
+              <div id="Frame_28_8">
+                <div id="Rectangle_15_8" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__118" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_11" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__119" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_8">
+                  <span id="_8_478" class="pointer-events-none text"><span id="__120">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="Frame_32_1">
+            <div id="Frame_29_9">
+              <div id="Frame_28_9">
+                <div id="Rectangle_15_9" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__121" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_12" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__122" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_9">
+                  <span id="_8_485" class="pointer-events-none text"><span id="__123">Honda Activa 5G</span></span>
+                </div>
+              </div>
+            </div>
+            <div id="Frame_29_10">
+              <div id="Frame_28_10">
+                <div id="Rectangle_15_10" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__124" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="image_1632_13" class="pointer-events-none">
+                  <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-d8e3c26ab882c0fc424dda1b70a7b61454d139d7/w=94" alt="image 1632" id="__125" fetchpriority="high" decoding="async" />
+                </div>
+                <div id="Frame_30_10">
+                  <span id="_8_491" class="pointer-events-none text"><span id="__126">Royal Enfield Classic</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="Rectangle_16_1" class="pointer-events-none">
+        </div>
+        <div id="Frame_27_1">
+          <div id="Frame_23_1">
+            <div id="vuesax_linear_home_3">
+              <div id="vuesax_linear_home_4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" id="home_3" class="pointer-events-none">
+                  <g id="home_4">
+                    <path d="M12 18L12 15" id="Vector_3">
+                    </path>
+                    <path d="M10.07 2.82L3.14 8.37C2.36 8.99 1.86 10.3 2.03 11.28L3.36 19.24C3.6 20.66 4.96 21.81 6.4 21.81L17.6 21.81C19.03 21.81 20.4 20.65 20.64 19.24L21.97 11.28C22.13 10.3 21.63 8.99 20.86 8.37L13.93 2.83C12.86 1.97 11.13 1.97 10.07 2.82Z" id="Vector_4">
+                    </path>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_496" class="pointer-events-none text"><span id="__127">Home</span></span>
+          </div>
+          <div id="Frame_24_1">
+            <div id="vuesax_linear_receipt_2_3">
+              <svg preserveAspectRatio="none" id="vuesax_linear_receipt_2_4" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 7.04V16.96C20 18.48 19.86 19.56 19.5 20.33C19.5 20.34 19.49 20.36 19.48 20.37C19.26 20.65 18.97 20.79 18.63 20.79C18.1 20.79 17.46 20.44 16.77 19.7C15.95 18.82 14.69 18.89 13.97 19.85L12.96 21.19C12.56 21.73 12.03 22 11.5 22C10.97 22 10.44 21.73 10.04 21.19L9.02002 19.84C8.31002 18.89 7.05999 18.82 6.23999 19.69L6.22998 19.7C5.09998 20.91 4.10002 21.09 3.52002 20.37C3.51002 20.36 3.5 20.34 3.5 20.33C3.14 19.56 3 18.48 3 16.96V7.04C3 5.52 3.14 4.44 3.5 3.67C3.5 3.66 3.50002 3.65 3.52002 3.64C4.09002 2.91 5.09998 3.09 6.22998 4.3L6.23999 4.31C7.05999 5.18 8.31002 5.11 9.02002 4.16L10.04 2.81C10.44 2.27 10.97 2 11.5 2C12.03 2 12.56 2.27 12.96 2.81L13.97 4.15C14.69 5.11 15.95 5.18 16.77 4.3C17.46 3.56 18.1 3.21 18.63 3.21C18.97 3.21 19.26 3.36 19.48 3.64C19.5 3.65 19.5 3.66 19.5 3.67C19.86 4.44 20 5.52 20 7.04Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 10.25H16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+                <path d="M8 13.75H14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                </path>
+              </svg>
+            </div>
+            <span id="_8_499" class="pointer-events-none text"><span id="__128">Orders</span></span>
+          </div>
+          <div id="Frame_25_1">
+            <div id="vuesax_linear_notification_3">
+              <div id="vuesax_linear_notification_4">
+                <svg preserveAspectRatio="none" id="notification_1" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.02 2.91003C8.70997 2.91003 6.01997 5.60003 6.01997 8.91003V11.8C6.01997 12.41 5.75997 13.34 5.44997 13.86L4.29997 15.77C3.58997 16.95 4.07997 18.26 5.37997 18.7C9.68997 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.90002 21.1801C9.36002 20.6401 9.02002 19.8801 9.02002 19.0601" stroke-width="1.5" stroke-miterlimit="10" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_502" class="pointer-events-none text"><span id="__129">Notification</span></span>
+          </div>
+          <div id="Frame_26_1">
+            <div id="vuesax_linear_profile_3">
+              <div id="vuesax_linear_profile_4">
+                <svg preserveAspectRatio="none" id="profile_1" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                  <path d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#AAAEBB">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span id="_8_505" class="pointer-events-none text"><span id="__130">Profile</span></span>
+          </div>
+        </div>
+        <div id="Rectangle_17_0" class="pointer-events-none">
+        </div>
+        <div id="Frame_35">
+          <div id="Rectangle_18" class="pointer-events-none">
+          </div>
+          <span id="_8_509" class="pointer-events-none text"><span id="__131">Pick Up Location</span></span>
+          <div id="Frame_35_0">
+            <span id="_8_511" class="pointer-events-none text"><span id="__132">Kalpetta North</span></span>
+            <span id="_8_512" class="pointer-events-none text"><span id="__133">postal codes (Kalpetta Head Post Office) and 67312</span></span>
+          </div>
+          <div id="Frame_36">
+            <span id="_8_514" class="pointer-events-none text"><span id="__134">Kalpetta North</span></span>
+            <span id="_8_515" class="pointer-events-none text"><span id="__135">postal codes (Kalpetta Head Post Office) and 67312</span></span>
+          </div>
+          <div id="Frame_37">
+            <span id="_8_517" class="pointer-events-none text"><span id="__136">Kalpetta North</span></span>
+            <span id="_8_518" class="pointer-events-none text"><span id="__137">postal codes (Kalpetta Head Post Office) and 67312</span></span>
+          </div>
+          <svg preserveAspectRatio="none" id="x-circle" class="pointer-events-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white">
+            </path>
+            <path d="M15 9L9 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white">
+            </path>
+            <path d="M9 9L15 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white">
+            </path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+  
+<div id="toast"></div><div id="ov"><div class="bg" data-close></div><div class="sh" id="sh"></div></div>
 <script>
-const c=document.getElementById('cal');
-[['November 2026',0,30,18],['December 2026',2,31,0]].forEach(([t,off,n,past])=>{
-  c.insertAdjacentHTML('beforeend',`<h4>${t}</h4>`);
-  const g=document.createElement('div');g.className='cg';
-  for(let i=0;i<off;i++)g.append(document.createElement('i'));
-  for(let d=1;d<=n;d++){const e=document.createElement('i');let k='';
-    if(past&&d<past)k='x';
-    if(past&&d===19)k='a';if(past&&d===20)k='z';
-    e.className=k;e.innerHTML=`<b>${d}</b>`;g.append(e)}
-  c.append(g)});
-</script>
-</body>
+(function(){
+var $=function(q,r){return (r||document).querySelector(q)},$$=function(q,r){return [].slice.call((r||document).querySelectorAll(q))};
+var H=$('#Home'),D=$('#Home_0'),L=$('#Home_1'),F=$('#Frame_38'),cur=H,OV=$('#ov'),TO=$('#toast');
+F.appendChild(TO);F.appendChild(OV);
+var st={loc:'Kalpetta North',date:'2026-05-20',t1:'10:30',t2:'11:30',orders:[]};
+try{st.orders=JSON.parse(sessionStorage.getItem('o')||'[]')}catch(e){}
+var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtD(d){var p=d.split('-');return +p[2]+' '+MN[+p[1]-1]+' '+p[0]}
+function fmtT(t){var p=t.split(':'),h=+p[0],a=h>=12?'PM':'AM';h=h%12||12;return (h<10?'0':'')+h+':'+p[1]+' '+a}
+function fit(){var w=innerWidth;if(w<393){F.style.transform='scale('+(w/393)+')';F.style.margin='0';document.body.style.height=(852*w/393)+'px'}else{F.style.transform='none';F.style.margin='0 auto'}}
+addEventListener('resize',fit);fit();
+function inner(e,v){var i=$('span',e);(i||e).textContent=v}
+// greeting same as the designed one
+inner($('#_8_188'),'Hello, Rachel 👋');
+function render(){[H,D,L].forEach(function(r){
+ $$('[id^=Frame_2]',r).forEach(function(b){var sp=$('span.text',b);if(!sp)return;var t=sp.textContent.trim();
+  if(/^\d+ \w+ \d{4}$/.test(t))inner(sp,fmtD(st.date));else if(/^(Kalpetta|Meppadi)/.test(t))inner(sp,st.loc)});
+ var ts=$$('[id^=Frame_7]',r);if(ts[0])inner($('span.text',ts[0]),fmtT(st.t1));if(ts[1])inner($('span.text',ts[1]),fmtT(st.t2));
+})}
+function toast(m){TO.textContent=m;TO.className='on';clearTimeout(toast.k);toast.k=setTimeout(function(){TO.className=''},2200)}
+function show(s){cur.style.display='none';s.style.display='block';cur=s;F.appendChild(TO);F.appendChild(OV)}
+H.style.display='block';
+function mk(type,cb){var i=document.createElement('input');i.type=type;i.className='pk';i.onchange=function(){if(i.value){cb(i.value);render()}};F.appendChild(i);return i}
+var p1=mk('time',function(v){st.t1=v}),p2=mk('time',function(v){st.t2=v});
+function pick(i){try{i.showPicker()}catch(e){i.focus();i.click()}}
+function ovOpen(h){$('#sh').innerHTML=h;OV.className='on'}
+function ovClose(){OV.className=''}
+OV.addEventListener('click',function(e){if(e.target.hasAttribute('data-close'))ovClose();var g=e.target.getAttribute('data-go');if(g==='ok')okBook()});
+var veh='';
+function book(c){$$('[id^=Frame_29_]',H).forEach(function(x){x.style.outline=''});c.style.outline='2px solid #1a667d';c.style.borderRadius='12px';veh=$('span.text',c).textContent.trim();
+ ovOpen('<h3>Confirm booking</h3><div class="r"><span>Vehicle</span><b>'+veh+'</b></div><div class="r"><span>Pick up</span><b>'+st.loc+'</b></div><div class="r"><span>Date</span><b>'+fmtD(st.date)+'</b></div><div class="r"><span>Time</span><b>'+fmtT(st.t1)+' – '+fmtT(st.t2)+'</b></div><div class="btn" data-go="ok">Confirm booking</div><div class="btn g" data-close>Cancel</div>')}
+function okBook(){st.orders.unshift({v:veh,l:st.loc,d:fmtD(st.date),t:fmtT(st.t1)+' – '+fmtT(st.t2)});try{sessionStorage.setItem('o',JSON.stringify(st.orders))}catch(e){}ovClose();toast('Booked ✓ '+veh)}
+function tab(n){if(n=='Home'){ovClose();return}
+ if(n=='Orders')ovOpen('<h3>Your orders</h3>'+(st.orders.length?st.orders.map(function(o){return '<div class="o"><b>'+o.v+'</b>'+o.l+' · '+o.d+' · '+o.t+'</div>'}).join(''):'<div class="o">No orders yet. Pick a vehicle to book one.</div>')+'<div class="btn g" data-close>Close</div>');
+ if(n=='Notification')ovOpen('<h3>Notifications</h3><div class="o"><b>Welcome 👋</b>Pick a vehicle and book your ride.</div>'+(st.orders[0]?'<div class="o"><b>Booking confirmed</b>'+st.orders[0].v+' · '+st.orders[0].d+'</div>':'')+'<div class="btn g" data-close>Close</div>');
+ if(n=='Profile')ovOpen('<h3>Profile</h3><div class="r"><span>Name</span><b>Rachel</b></div><div class="r"><span>Location</span><b>'+st.loc+'</b></div><div class="r"><span>Bookings</span><b>'+st.orders.length+'</b></div><div class="btn g" data-close>Close</div>')}
+function wire(r){
+ $$('[id^=Frame_2]',r).forEach(function(b){var sp=$('span.text',b);if(!sp)return;var t=sp.textContent.trim();b.setAttribute('data-act','');
+  b.onclick=/^\d+ \w+ \d{4}$/.test(t)?function(){show(D)}:function(){show(L)}});
+ $$('[id^=Frame_7]',r).forEach(function(b,i){b.setAttribute('data-act','');b.onclick=function(){var p=i%2?p2:p1;p.value=i%2?st.t2:st.t1;pick(p)}});
+ var cta=$('[id^=CTA_Button]',r);cta.setAttribute('data-act','');cta.onclick=function(){toast($$('[id^=Frame_29_]',r).length+' vehicles available near '+st.loc+' · '+fmtD(st.date))};
+ $$('[id^=Frame_29_]',r).forEach(function(c){c.setAttribute('data-act','');c.onclick=function(){book(c)}});
+ var nav=$('[id^=Frame_27]',r);['Home','Orders','Notification','Profile'].forEach(function(n,i){var b=nav.children[i];b.setAttribute('data-act','');b.onclick=function(){tab(n)}});
+}
+wire(H);
+// location sheet (screen 3)
+var rows=['Frame_35_0','Frame_36','Frame_37'],names=['Kalpetta North','Kalpetta South','Meppadi'];
+rows.forEach(function(id,i){var r=$('#'+id);r.setAttribute('data-act','');var t=$$('span.text',r);if(i&&t[0])inner(t[0],names[i]);r.onclick=function(){st.loc=names[i];render();show(H);toast('Pick up: '+st.loc)}});
+var o3=$('#Rectangle_17_0');o3.style.pointerEvents='auto';o3.onclick=function(){show(H)};
+// calendar (screen 2)
+var o2=$('#Rectangle_17');o2.style.pointerEvents='auto';o2.onclick=function(){show(H)};
+var cal=$('#Ride_Green_09_Dates_and_pickup'),sel=$('#Selected_date_0'),pick_d=21;
+var days={};for(var n=1;n<=30;n++)days[n]=$('#_'+n,cal);
+var orig={};for(n=20;n<=30;n++)orig[n]=[days[n].style.color,''];
+function setDay(n){pick_d=n;sel.style.left=days[n].offsetLeft+'px';sel.style.top=(days[n].offsetTop-5.3)+'px';
+ for(var k=20;k<=30;k++){days[k].style.color=k==n?'#fff':'';days[k].style.fontWeight=k==n?'700':''}
+ st.date='2026-11-'+(n<10?'0'+n:n)}
+for(n=20;n<=30;n++)(function(n){days[n].setAttribute('data-act','');days[n].onclick=function(){setDay(n);render()}})(n);
+$('#_8_409',cal).setAttribute('data-act','');$('#_8_409',cal).style.pointerEvents='auto';
+var dn=$('#_8_409',cal);dn.onclick=function(){render();show(H);toast('Date: '+fmtD(st.date))};
+render();
+})();
+</script></body>
 </html>
