@@ -53,7 +53,7 @@ html,body{background:#fff}
 #Frame_38{width:393px!important;min-width:393px!important;max-width:393px!important;margin:0 auto;transform-origin:top left}
 #Home,#Home_0,#Home_1{left:0!important;display:none}
 [data-act]{cursor:pointer;-webkit-tap-highlight-color:transparent}
-#Frame_38 [id^=Frame_29_] *{pointer-events:none}
+#Frame_38 [id^=Frame_29] *{pointer-events:none}
 #Ride_Green_09_Dates_and_pickup>span{pointer-events:auto!important}
 #toast{position:absolute;left:50%;bottom:90px;transform:translate(-50%,20px);background:#000;color:#fff;font:500 13px/1.4 Quicksand,sans-serif;padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;z-index:60;pointer-events:none;width:max-content;max-width:340px;text-align:center}
 #toast.on{opacity:1;transform:translate(-50%,0)}
@@ -69,6 +69,44 @@ html,body{background:#fff}
 #ov .o{padding:12px 0;border-bottom:.5px solid #0000004a;font:500 13px/150% Quicksand,sans-serif;color:#393c47}
 #ov .o b{display:block;color:#000;font-size:14px}
 .pk{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;top:0}
+#AV{position:absolute;inset:0 0 72px 0;background:#fff;z-index:30;display:none;overflow:hidden;font-family:Quicksand,sans-serif}
+#AV.on{display:block}
+#AV .hd{position:absolute;top:-100px;left:0;width:393px;height:304px;background:#1a667d}
+#AV .tt{position:absolute;left:20px;top:57px;color:#fff;font:600 20px/160% 'General Sans',Quicksand,system-ui,sans-serif;display:flex;align-items:center;gap:10px}
+#AV .tt i{cursor:pointer;font-style:normal;font-size:24px;line-height:1}
+#AV .st{position:absolute;left:20px;top:89px;color:#fff;font:500 12px/170% Quicksand,sans-serif}
+#AV .bd{position:absolute;top:130px;left:0;width:393px;height:650px;background:#fff;border-radius:24px 24px 0 0;padding:20px;overflow:auto}
+#AV .bd h4{font:600 16px Quicksand,sans-serif;color:#000;margin-bottom:12px}
+#AV .cd{border:1px solid #e0e2eb;border-radius:12px;padding:10px;display:flex;gap:12px;align-items:center;margin-bottom:12px;background:#fff}
+#AV .cd img{width:110px;height:84px;object-fit:cover;border-radius:8px;background:#f2f3f5}
+#AV .cd b{display:block;font:600 14px Quicksand,sans-serif;color:#000}
+#AV .cd small{display:block;font:500 12px/150% Quicksand,sans-serif;color:#393c47}
+#AV .cd em{font:600 12px Quicksand,sans-serif;color:#1a667d;font-style:normal}
+#AV .bk{margin-top:8px;background:#000;color:#fff;border-radius:8px;height:32px;display:inline-flex;align-items:center;padding:0 18px;font:600 13px Quicksand,sans-serif;cursor:pointer}
+#AV .nv{position:absolute;left:0;bottom:0;width:393px;height:72px;background:#fff}
+#AV .nv>div{position:absolute;top:0}
+#DT{position:absolute;inset:0;background:#fff;z-index:35;display:none;overflow:hidden;font-family:Quicksand,sans-serif}
+#DT.on{display:block}
+#DT .hd{position:absolute;top:-100px;left:0;width:393px;height:304px;background:#1a667d}
+#DT .tt{position:absolute;left:20px;top:57px;color:#fff;font:600 20px/160% 'General Sans',Quicksand,system-ui,sans-serif;display:flex;align-items:center;gap:10px}
+#DT .tt i{cursor:pointer;font-style:normal;font-size:24px;line-height:1}
+#DT .bd{position:absolute;top:110px;left:0;width:393px;height:662px;overflow:auto;padding:0 20px 20px}
+#DT .im{width:100%;height:210px;border-radius:16px;background:#f2f3f5;border:1px solid #e0e2eb;overflow:hidden}
+#DT .im img{width:100%;height:100%;object-fit:cover}
+#DT h2{font:700 20px Quicksand,sans-serif;color:#000;margin:16px 0 4px}
+#DT .av{font:600 12px Quicksand,sans-serif;color:#1a667d}
+#DT h5{font:600 14px Quicksand,sans-serif;color:#000;margin:18px 0 8px}
+#DT .gr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#DT .sp{border:1px solid #e0e2eb;border-radius:8px;padding:10px 12px}
+#DT .sp small{display:block;font:500 11px Quicksand,sans-serif;color:#797c8d}
+#DT .sp b{font:600 13px Quicksand,sans-serif;color:#000}
+#DT .rw{display:flex;justify-content:space-between;font:500 13px/170% Quicksand,sans-serif;color:#393c47;border-bottom:.5px solid #0000004a;padding:6px 0}
+#DT .rw b{color:#000;font-weight:600}
+#DT .bar{position:absolute;left:0;bottom:0;width:393px;height:80px;background:#fff;border-top:1px solid #e0e2eb;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+#DT .bar small{display:block;font:500 11px Quicksand,sans-serif;color:#797c8d}
+#DT .bar b{font:700 18px Quicksand,sans-serif;color:#000}
+#DT .bar .go{background:#000;color:#fff;border-radius:10px;height:46px;padding:0 32px;display:flex;align-items:center;font:600 14px Quicksand,sans-serif;cursor:pointer}
+#AV .cd{cursor:pointer}
 </style><style>article.prose { line-height: 1.75; display: contents; }
 article.prose a { font-weight: 500; text-decoration: underline; }
 article.prose h1 { margin-block: 0px 1.23em; font-size: 2.25em; line-height: 1.11; }
@@ -613,7 +651,7 @@ html, body { background: rgb(255, 255, 255); }
 #Frame_38 { margin: 0px auto; transform-origin: left top; width: 393px !important; min-width: 393px !important; max-width: 393px !important; }
 #Home, #Home_0, #Home_1 { left: 0px !important; display: none; }
 [data-act] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
-#Frame_38 [id^="Frame_29_"] * { pointer-events: none; }
+#Frame_38 [id^="Frame_29"] * { pointer-events: none; }
 #Ride_Green_09_Dates_and_pickup > span { pointer-events: auto !important; }
 #toast { position: absolute; left: 50%; bottom: 90px; transform: translate(-50%, 20px); background: rgb(0, 0, 0); color: rgb(255, 255, 255); font: 500 13px / 1.4 Quicksand, sans-serif; padding: 10px 16px; border-radius: 10px; opacity: 0; transition: 0.25s; z-index: 60; pointer-events: none; width: max-content; max-width: 340px; text-align: center; }
 #toast.on { opacity: 1; transform: translate(-50%, 0px); }
@@ -628,7 +666,45 @@ html, body { background: rgb(255, 255, 255); }
 #ov .btn.g { background: rgb(255, 255, 255); color: rgb(26, 102, 125); border: 1px solid rgb(26, 102, 125); margin-top: 8px; }
 #ov .o { padding: 12px 0px; border-bottom: 0.5px solid rgba(0, 0, 0, 0.29); font: 500 13px / 150% Quicksand, sans-serif; color: rgb(57, 60, 71); }
 #ov .o b { display: block; color: rgb(0, 0, 0); font-size: 14px; }
-.pk { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; left: 0px; top: 0px; }</style></head>
+.pk { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; left: 0px; top: 0px; }
+#AV { position: absolute; inset: 0px 0px 72px; background: rgb(255, 255, 255); z-index: 30; display: none; overflow: hidden; font-family: Quicksand, sans-serif; }
+#AV.on { display: block; }
+#AV .hd { position: absolute; top: -100px; left: 0px; width: 393px; height: 304px; background: rgb(26, 102, 125); }
+#AV .tt { position: absolute; left: 20px; top: 57px; color: rgb(255, 255, 255); font: 600 20px / 160% "General Sans", Quicksand, system-ui, sans-serif; display: flex; align-items: center; gap: 10px; }
+#AV .tt i { cursor: pointer; font-style: normal; font-size: 24px; line-height: 1; }
+#AV .st { position: absolute; left: 20px; top: 89px; color: rgb(255, 255, 255); font: 500 12px / 170% Quicksand, sans-serif; }
+#AV .bd { position: absolute; top: 130px; left: 0px; width: 393px; height: 650px; background: rgb(255, 255, 255); border-radius: 24px 24px 0px 0px; padding: 20px; overflow: auto; }
+#AV .bd h4 { font: 600 16px Quicksand, sans-serif; color: rgb(0, 0, 0); margin-bottom: 12px; }
+#AV .cd { border: 1px solid rgb(224, 226, 235); border-radius: 12px; padding: 10px; display: flex; gap: 12px; align-items: center; margin-bottom: 12px; background: rgb(255, 255, 255); }
+#AV .cd img { width: 110px; height: 84px; object-fit: cover; border-radius: 8px; background: rgb(242, 243, 245); }
+#AV .cd b { display: block; font: 600 14px Quicksand, sans-serif; color: rgb(0, 0, 0); }
+#AV .cd small { display: block; font: 500 12px / 150% Quicksand, sans-serif; color: rgb(57, 60, 71); }
+#AV .cd em { font: 600 12px Quicksand, sans-serif; color: rgb(26, 102, 125); }
+#AV .bk { margin-top: 8px; background: rgb(0, 0, 0); color: rgb(255, 255, 255); border-radius: 8px; height: 32px; display: inline-flex; align-items: center; padding: 0px 18px; font: 600 13px Quicksand, sans-serif; cursor: pointer; }
+#AV .nv { position: absolute; left: 0px; bottom: 0px; width: 393px; height: 72px; background: rgb(255, 255, 255); }
+#AV .nv > div { position: absolute; top: 0px; }
+#DT { position: absolute; inset: 0px; background: rgb(255, 255, 255); z-index: 35; display: none; overflow: hidden; font-family: Quicksand, sans-serif; }
+#DT.on { display: block; }
+#DT .hd { position: absolute; top: -100px; left: 0px; width: 393px; height: 304px; background: rgb(26, 102, 125); }
+#DT .tt { position: absolute; left: 20px; top: 57px; color: rgb(255, 255, 255); font: 600 20px / 160% "General Sans", Quicksand, system-ui, sans-serif; display: flex; align-items: center; gap: 10px; }
+#DT .tt i { cursor: pointer; font-style: normal; font-size: 24px; line-height: 1; }
+#DT .bd { position: absolute; top: 110px; left: 0px; width: 393px; height: 662px; overflow: auto; padding: 0px 20px 20px; }
+#DT .im { width: 100%; height: 210px; border-radius: 16px; background: rgb(242, 243, 245); border: 1px solid rgb(224, 226, 235); overflow: hidden; }
+#DT .im img { width: 100%; height: 100%; object-fit: cover; }
+#DT h2 { font: 700 20px Quicksand, sans-serif; color: rgb(0, 0, 0); margin: 16px 0px 4px; }
+#DT .av { font: 600 12px Quicksand, sans-serif; color: rgb(26, 102, 125); }
+#DT h5 { font: 600 14px Quicksand, sans-serif; color: rgb(0, 0, 0); margin: 18px 0px 8px; }
+#DT .gr { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#DT .sp { border: 1px solid rgb(224, 226, 235); border-radius: 8px; padding: 10px 12px; }
+#DT .sp small { display: block; font: 500 11px Quicksand, sans-serif; color: rgb(121, 124, 141); }
+#DT .sp b { font: 600 13px Quicksand, sans-serif; color: rgb(0, 0, 0); }
+#DT .rw { display: flex; justify-content: space-between; font: 500 13px / 170% Quicksand, sans-serif; color: rgb(57, 60, 71); border-bottom: 0.5px solid rgba(0, 0, 0, 0.29); padding: 6px 0px; }
+#DT .rw b { color: rgb(0, 0, 0); font-weight: 600; }
+#DT .bar { position: absolute; left: 0px; bottom: 0px; width: 393px; height: 80px; background: rgb(255, 255, 255); border-top: 1px solid rgb(224, 226, 235); display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; }
+#DT .bar small { display: block; font: 500 11px Quicksand, sans-serif; color: rgb(121, 124, 141); }
+#DT .bar b { font: 700 18px Quicksand, sans-serif; color: rgb(0, 0, 0); }
+#DT .bar .go { background: rgb(0, 0, 0); color: rgb(255, 255, 255); border-radius: 10px; height: 46px; padding: 0px 32px; display: flex; align-items: center; font: 600 14px Quicksand, sans-serif; cursor: pointer; }
+#AV .cd { cursor: pointer; }</style></head>
   <body id="_">
     <div id="Frame_38" style="transform: none; margin: 0px auto;">
       <div id="Home" style="display: block;">
@@ -786,8 +862,8 @@ html, body { background: rgb(255, 255, 255); }
             <span id="_8_228" class="pointer-events-none text"><span id="__13">Our Collections</span></span>
           </div>
           <div id="Frame_31">
-            <div id="Frame_29" data-act="">
-              <div id="Frame_28" data-act="">
+            <div id="Frame_29" data-act="" style="border-radius: 12px; outline: rgb(26, 102, 125) solid 2px;">
+              <div id="Frame_28">
                 <div id="Rectangle_15" class="pointer-events-none">
                   <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__14" fetchpriority="high" decoding="async">
                 </div>
@@ -799,8 +875,8 @@ html, body { background: rgb(255, 255, 255); }
                 </div>
               </div>
             </div>
-            <div id="Frame_29_0" data-act="" style="outline: rgb(26, 102, 125) solid 2px; border-radius: 12px;">
-              <div id="Frame_28_0" data-act="">
+            <div id="Frame_29_0" data-act="">
+              <div id="Frame_28_0">
                 <div id="Rectangle_15_0" class="pointer-events-none">
                   <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__17" fetchpriority="high" decoding="async">
                 </div>
@@ -815,7 +891,7 @@ html, body { background: rgb(255, 255, 255); }
           </div>
           <div id="Frame_32">
             <div id="Frame_29_1" data-act="">
-              <div id="Frame_28_1" data-act="">
+              <div id="Frame_28_1">
                 <div id="Rectangle_15_1" class="pointer-events-none">
                   <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt="Rectangle 15" id="__20" fetchpriority="high" decoding="async">
                 </div>
@@ -828,7 +904,7 @@ html, body { background: rgb(255, 255, 255); }
               </div>
             </div>
             <div id="Frame_29_2" data-act="">
-              <div id="Frame_28_2" data-act="">
+              <div id="Frame_28_2">
                 <div id="Rectangle_15_2" class="pointer-events-none">
                   <img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt="Rectangle 15" id="__23" fetchpriority="high" decoding="async">
                 </div>
@@ -844,7 +920,7 @@ html, body { background: rgb(255, 255, 255); }
         </div>
         <div id="Rectangle_16" class="pointer-events-none">
         </div>
-        <div id="Frame_27" data-act="">
+        <div id="Frame_27">
           <div id="Frame_23" data-act="">
             <div id="vuesax_linear_home">
               <div id="vuesax_linear_home_0">
@@ -1224,7 +1300,7 @@ html, body { background: rgb(255, 255, 255); }
           <span id="_8_409" class="pointer-events-none text" data-act="" style="pointer-events: auto;"><span id="__100">Done</span></span>
         </div>
       </div>
-      <div id="Home_1" style="display: none;">
+      <div id="Home_1">
         <div id="Rectangle_7_1" class="pointer-events-none">
         </div>
         <svg preserveAspectRatio="none" id="Status_Bar_Light_1" class="pointer-events-none" width="393" height="46" viewBox="0 0 393 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1523,7 +1599,7 @@ html, body { background: rgb(255, 255, 255); }
           </svg>
         </div>
       </div>
-    <input type="time" class="pk" value=""><input type="time" class="pk" value=""><div id="toast" class="">Pick up: Kalpetta North</div><div id="ov" class="on"><div class="bg" data-close=""></div><div class="sh" id="sh"><h3>Confirm booking</h3><div class="r"><span>Vehicle</span><b>Royal Enfield Classic</b></div><div class="r"><span>Pick up</span><b>Kalpetta North</b></div><div class="r"><span>Date</span><b>20 May 2026</b></div><div class="r"><span>Time</span><b>10:30 AM – 11:30 AM</b></div><div class="btn" data-go="ok">Confirm booking</div><div class="btn g" data-close="">Cancel</div></div></div></div>
+    <input type="time" class="pk" value=""><input type="time" class="pk" value=""><div id="AV" class="on"><div class="hd"></div><div class="tt"><i data-back="">‹</i>Available Bikes</div><div class="st" id="avs">Kalpetta North · 20 May 2026 · 10:30 AM – 11:30 AM</div><div class="bd" id="avb"><h4>2 bikes available</h4><div class="cd" data-i="0"><img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt=""><div><b>Honda Activa 5G</b><small>Pick up: Kalpetta North</small><em>Available</em><br><span class="bk" data-bk="0">Book now</span></div></div><div class="cd" data-i="1"><img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-ea5c29afff2bc6e514c73ca7ff5fd9404d74cacd/w=320" alt=""><div><b>Royal Enfield Classic</b><small>Pick up: Kalpetta North</small><em>Available</em><br><span class="bk" data-bk="1">Book now</span></div></div></div></div><div id="DT" class="on"><div class="hd"></div><div class="tt"><i data-back="">‹</i>Vehicle Details</div><div class="bd" id="dtb"><div class="im"><img src="https://merissa-q9ahr7v2y4.figweb.site/cdn-cgi/imagedelivery/s-dfVpmPR-aKHmwFNwAgnQ/merissa-q9ahr7v2y4.figweb.site-29561bc46d8391b3c7cae966d6949bb48eb9fcf0/h=350" alt=""></div><h2>Honda Activa 5G</h2><span class="av">Available · Scooter</span><h5>Specifications</h5><div class="gr"><div class="sp"><small>Engine</small><b>109.2 cc</b></div><div class="sp"><small>Transmission</small><b>Automatic</b></div><div class="sp"><small>Fuel tank</small><b>5.3 L</b></div><div class="sp"><small>Seats</small><b>2</b></div></div><h5>Your trip</h5><div class="rw"><span>Pick up</span><b>Kalpetta North</b></div><div class="rw"><span>Date</span><b>20 May 2026</b></div><div class="rw"><span>Time</span><b>10:30 AM – 11:30 AM</b></div><div class="rw"><span>Rate</span><b>₹60 / hour</b></div></div><div class="bar" id="dtr"><div><small>Total · 1 hr</small><b>₹60</b></div><div class="go" data-bookdt="">Book now</div></div></div><div id="toast" class="">Booked ✓ Honda Activa 5G</div><div id="ov" class=""><div class="bg" data-close=""></div><div class="sh" id="sh"><h3>Confirm booking</h3><div class="r"><span>Vehicle</span><b>Honda Activa 5G</b></div><div class="r"><span>Pick up</span><b>Kalpetta North</b></div><div class="r"><span>Date</span><b>20 May 2026</b></div><div class="r"><span>Time</span><b>10:30 AM – 11:30 AM</b></div><div class="r"><span>Total</span><b>₹60</b></div><div class="btn" data-go="ok">Confirm booking</div><div class="btn g" data-close="">Cancel</div></div></div></div>
     
   
 
@@ -1531,7 +1607,7 @@ html, body { background: rgb(255, 255, 255); }
 (function(){
 var $=function(q,r){return (r||document).querySelector(q)},$$=function(q,r){return [].slice.call((r||document).querySelectorAll(q))};
 var H=$('#Home'),D=$('#Home_0'),L=$('#Home_1'),F=$('#Frame_38'),cur=H,OV=$('#ov'),TO=$('#toast');
-F.appendChild(TO);F.appendChild(OV);
+var AV=$('#AV'),DT=$('#DT');F.appendChild(AV);F.appendChild(DT);F.appendChild(TO);F.appendChild(OV);
 var st={loc:'Kalpetta North',date:'2026-05-20',t1:'10:30',t2:'11:30',orders:[]};
 try{st.orders=JSON.parse(sessionStorage.getItem('o')||'[]')}catch(e){}
 var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1548,28 +1624,46 @@ function render(){[H,D,L].forEach(function(r){
  var ts=$$('[id^=Frame_7]',r);if(ts[0])inner($('span.text',ts[0]),fmtT(st.t1));if(ts[1])inner($('span.text',ts[1]),fmtT(st.t2));
 })}
 function toast(m){TO.textContent=m;TO.className='on';clearTimeout(toast.k);toast.k=setTimeout(function(){TO.className=''},2200)}
-function show(s){cur.style.display='none';s.style.display='block';cur=s;F.appendChild(TO);F.appendChild(OV)}
+function show(s){AV.className='';DT.className='';cur.style.display='none';s.style.display='block';cur=s;F.appendChild(AV);F.appendChild(DT);F.appendChild(TO);F.appendChild(OV)}
 H.style.display='block';
 function mk(type,cb){var i=document.createElement('input');i.type=type;i.className='pk';i.onchange=function(){if(i.value){cb(i.value);render()}};F.appendChild(i);return i}
 var p1=mk('time',function(v){st.t1=v}),p2=mk('time',function(v){st.t2=v});
 function pick(i){try{i.showPicker()}catch(e){i.focus();i.click()}}
 function ovOpen(h){$('#sh').innerHTML=h;OV.className='on'}
 function ovClose(){OV.className=''}
-OV.addEventListener('click',function(e){if(e.target.hasAttribute('data-close'))ovClose();var g=e.target.getAttribute('data-go');if(g==='ok')okBook()});
+OV.addEventListener('click',function(e){if(e.target.hasAttribute('data-close'))ovClose();var g=e.target.getAttribute('data-go');if(g==='ok')okBook();if(g&&g[0]==='b'&&g!=='ok')book(window.__res[+g.slice(1)].c)});
+
+var VD={'Honda Activa 5G':{p:60,t:'Scooter',s:[['Engine','109.2 cc'],['Transmission','Automatic'],['Fuel tank','5.3 L'],['Seats','2']]},
+ 'Royal Enfield Classic':{p:120,t:'Cruiser',s:[['Engine','349 cc'],['Transmission','5-speed manual'],['Fuel tank','13 L'],['Seats','2']]}};
+function hrs(){var a=st.t1.split(':'),b=st.t2.split(':'),m=(+b[0]*60+ +b[1])-(+a[0]*60+ +a[1]);if(m<=0)m+=1440;return Math.max(1,Math.ceil(m/60))}
+function total(n){return (VD[n]?VD[n].p:0)*hrs()}
+var dcard=null;
+function details(c){dcard=c;var n=$('span.text',c).textContent.trim(),v=VD[n]||{p:0,t:'Bike',s:[]},im=$('img',c),h=hrs();
+ $('#dtb').innerHTML='<div class="im"><img src="'+(im?im.src:'')+'" alt=""></div><h2>'+n+'</h2><span class="av">Available · '+v.t+'</span><h5>Specifications</h5><div class="gr">'+v.s.map(function(x){return '<div class="sp"><small>'+x[0]+'</small><b>'+x[1]+'</b></div>'}).join('')+'</div><h5>Your trip</h5><div class="rw"><span>Pick up</span><b>'+st.loc+'</b></div><div class="rw"><span>Date</span><b>'+fmtD(st.date)+'</b></div><div class="rw"><span>Time</span><b>'+fmtT(st.t1)+' – '+fmtT(st.t2)+'</b></div><div class="rw"><span>Rate</span><b>₹'+v.p+' / hour</b></div>';
+ $('#dtr').innerHTML='<div><small>Total · '+h+' hr</small><b>₹'+total(n)+'</b></div><div class="go" data-bookdt>Book now</div>';
+ DT.className='on';F.appendChild(DT);F.appendChild(TO);F.appendChild(OV)}
+DT.addEventListener('click',function(e){var t=e.target;if(t.hasAttribute('data-back'))DT.className='';if(t.hasAttribute('data-bookdt'))book(dcard)});
 var veh='';
-function book(c){$$('[id^=Frame_29_]',H).forEach(function(x){x.style.outline=''});c.style.outline='2px solid #1a667d';c.style.borderRadius='12px';veh=$('span.text',c).textContent.trim();
- ovOpen('<h3>Confirm booking</h3><div class="r"><span>Vehicle</span><b>'+veh+'</b></div><div class="r"><span>Pick up</span><b>'+st.loc+'</b></div><div class="r"><span>Date</span><b>'+fmtD(st.date)+'</b></div><div class="r"><span>Time</span><b>'+fmtT(st.t1)+' – '+fmtT(st.t2)+'</b></div><div class="btn" data-go="ok">Confirm booking</div><div class="btn g" data-close>Cancel</div>')}
-function okBook(){st.orders.unshift({v:veh,l:st.loc,d:fmtD(st.date),t:fmtT(st.t1)+' – '+fmtT(st.t2)});try{sessionStorage.setItem('o',JSON.stringify(st.orders))}catch(e){}ovClose();toast('Booked ✓ '+veh)}
-function tab(n){if(n=='Home'){ovClose();return}
+function book(c){$$('[id^=Frame_29]',H).forEach(function(x){x.style.outline=''});c.style.outline='2px solid #1a667d';c.style.borderRadius='12px';veh=$('span.text',c).textContent.trim();
+ ovOpen('<h3>Confirm booking</h3><div class="r"><span>Vehicle</span><b>'+veh+'</b></div><div class="r"><span>Pick up</span><b>'+st.loc+'</b></div><div class="r"><span>Date</span><b>'+fmtD(st.date)+'</b></div><div class="r"><span>Time</span><b>'+fmtT(st.t1)+' – '+fmtT(st.t2)+'</b></div><div class="r"><span>Total</span><b>₹'+total(veh)+'</b></div><div class="btn" data-go="ok">Confirm booking</div><div class="btn g" data-close>Cancel</div>')}
+function okBook(){st.orders.unshift({v:veh,l:st.loc,d:fmtD(st.date),t:fmtT(st.t1)+' – '+fmtT(st.t2)+' · ₹'+total(veh)});try{sessionStorage.setItem('o',JSON.stringify(st.orders))}catch(e){}ovClose();AV.className='';DT.className='';toast('Booked ✓ '+veh)}
+function tab(n){if(n=='Home'){ovClose();AV.className='';DT.className='';return}
  if(n=='Orders')ovOpen('<h3>Your orders</h3>'+(st.orders.length?st.orders.map(function(o){return '<div class="o"><b>'+o.v+'</b>'+o.l+' · '+o.d+' · '+o.t+'</div>'}).join(''):'<div class="o">No orders yet. Pick a vehicle to book one.</div>')+'<div class="btn g" data-close>Close</div>');
  if(n=='Notification')ovOpen('<h3>Notifications</h3><div class="o"><b>Welcome 👋</b>Pick a vehicle and book your ride.</div>'+(st.orders[0]?'<div class="o"><b>Booking confirmed</b>'+st.orders[0].v+' · '+st.orders[0].d+'</div>':'')+'<div class="btn g" data-close>Close</div>');
  if(n=='Profile')ovOpen('<h3>Profile</h3><div class="r"><span>Name</span><b>Rachel</b></div><div class="r"><span>Location</span><b>'+st.loc+'</b></div><div class="r"><span>Bookings</span><b>'+st.orders.length+'</b></div><div class="btn g" data-close>Close</div>')}
+
+function results(r){var seen={},items=[];$$('[id^=Frame_29]',r).forEach(function(c){var n=$('span.text',c).textContent.trim();if(seen[n])return;seen[n]=1;var im=$('img',c);items.push({n:n,s:im?im.src:'',c:c})});
+ window.__res=items;
+ $('#avs').textContent=st.loc+' · '+fmtD(st.date)+' · '+fmtT(st.t1)+' – '+fmtT(st.t2);
+ $('#avb').innerHTML='<h4>'+items.length+' bikes available</h4>'+items.map(function(v,i){return '<div class="cd" data-i="'+i+'"><img src="'+v.s+'" alt=""><div><b>'+v.n+'</b><small>Pick up: '+st.loc+'</small><em>Available</em><br><span class="bk" data-bk="'+i+'">Book now</span></div></div>'}).join('');
+ AV.className='on';F.appendChild(AV);F.appendChild(DT);F.appendChild(TO);F.appendChild(OV)}
+AV.addEventListener('click',function(e){var t=e.target;if(t.hasAttribute('data-back'))AV.className='';var k=t.getAttribute('data-bk');if(k!==null){book(window.__res[+k].c);return}var cd=t.closest&&t.closest('.cd');if(cd)details(window.__res[+cd.getAttribute('data-i')].c)});
 function wire(r){
- $$('[id^=Frame_2]',r).forEach(function(b){var sp=$('span.text',b);if(!sp)return;var t=sp.textContent.trim();b.setAttribute('data-act','');
+ $$('[id^=Frame_2]',r).forEach(function(b){var sp=$('span.text',b);if(!sp)return;var t=sp.textContent.trim();if(!/^\d+ \w+ \d{4}$/.test(t)&&!/^(Kalpetta|Meppadi)/.test(t))return;b.setAttribute('data-act','');
   b.onclick=/^\d+ \w+ \d{4}$/.test(t)?function(){show(D)}:function(){show(L)}});
  $$('[id^=Frame_7]',r).forEach(function(b,i){b.setAttribute('data-act','');b.onclick=function(){var p=i%2?p2:p1;p.value=i%2?st.t2:st.t1;pick(p)}});
- var cta=$('[id^=CTA_Button]',r);cta.setAttribute('data-act','');cta.onclick=function(){toast($$('[id^=Frame_29_]',r).length+' vehicles available near '+st.loc+' · '+fmtD(st.date))};
- $$('[id^=Frame_29_]',r).forEach(function(c){c.setAttribute('data-act','');c.onclick=function(){book(c)}});
+ var cta=$('[id^=CTA_Button]',r);cta.setAttribute('data-act','');cta.onclick=function(){results(r)};
+ $$('[id^=Frame_29]',r).forEach(function(c){c.setAttribute('data-act','');c.onclick=function(){details(c)}});
  var nav=$('[id^=Frame_27]',r);['Home','Orders','Notification','Profile'].forEach(function(n,i){var b=nav.children[i];b.setAttribute('data-act','');b.onclick=function(){tab(n)}});
 }
 wire(H);
